@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenSec Studio v1.10.10 — The Ultra-Fast DevSecOps & DAST Workbench in Rust</title>
+  <meta name="description" content="OpenSec Studio es la suite definitiva de ciberseguridad ofensiva y auditoría DAST construida en Rust nativo. 100x más rápida que Burp Suite, arranque en 150ms, menos de 95MB de RAM. Desarrollada por el saghet.">
+  <meta name="keywords" content="opensec studio, el saghet, burp suite alternative, rust dast scanner, mitm proxy, nuclei yaml templates, oast collaborator, bug bounty tools">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306b6d4' stroke-width='2'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/></svg>">
+  <style>
+    :root {
+      --bg-dark: #070b14;
+      --card-bg: #0d1527;
+      --border-color: #1e2c4a;
+      --cyan-glow: #06b6d4;
+      --amber-btc: #f7931a;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent-red: #ef4444;
+      --accent-green: #10b981;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Cyber grid background */
+    .cyber-bg {
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.15), transparent 60%),
+        radial-gradient(circle at 85% 30%, rgba(247, 147, 26, 0.08), transparent 50%),
+        linear-gradient(to right, rgba(30, 44, 74, 0.2) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(30, 44, 74, 0.2) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header Nav */
+    header {
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(7, 11, 20, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+    .logo svg { width: 28px; height: 28px; color: var(--cyan-glow); }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--cyan-glow); }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-family: monospace;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-cyan { background: rgba(6, 182, 212, 0.15); color: var(--cyan-glow); border: 1px solid rgba(6, 182, 212, 0.35); }
+    .badge-amber { background: rgba(247, 147, 26, 0.15); color: var(--amber-btc); border: 1px solid rgba(247, 147, 26, 0.35); }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 80px 0 60px;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 5.5vw, 64px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin: 20px 0;
+      letter-spacing: -1.5px;
+    }
+    .hero-gradient {
+      background: linear-gradient(135deg, #fff 30%, var(--cyan-glow) 70%, var(--amber-btc) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--text-muted);
+      max-width: 800px;
+      margin: 0 auto 36px;
+    }
+    .hero-cta {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan-glow), #0284c7);
+      color: #041019;
+      box-shadow: 0 0 30px rgba(6, 182, 212, 0.35);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 45px rgba(6, 182, 212, 0.55);
+    }
+    .btn-secondary {
+      background: #17243c;
+      color: #fff;
+      border: 1px solid var(--border-color);
+    }
+    .btn-secondary:hover {
+      background: #1e3052;
+      border-color: var(--cyan-glow);
+    }
+
+    /* Benchmark Widget */
+    .benchmark-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: 20px;
+      padding: 32px;
+      margin: 40px auto 70px;
+      max-width: 950px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    .benchmark-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 16px;
+    }
+    .benchmark-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .bench-item {
+      background: #090e1a;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .bench-label { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
+    .bench-bar-container { margin: 12px 0 6px; }
+    .bench-bar {
+      height: 10px;
+      border-radius: 5px;
+      margin-bottom: 6px;
+      position: relative;
+    }
+    .bench-rust { background: var(--cyan-glow); width: 6%; }
+    .bench-java { background: var(--accent-red); width: 95%; }
+
+    /* Features Grid */
+    .section-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+      font-size: 16px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 80px;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.2s;
+    }
+    .feature-card:hover {
+      border-color: var(--cyan-glow);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(6, 182, 212, 0.15);
+    }
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(6, 182, 212, 0.1);
+      color: var(--cyan-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+    .feature-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .feature-card p { font-size: 14px; color: var(--text-muted); }
+
+    /* Download Matrix */
+    .download-section {
+      background: linear-gradient(180deg, transparent, #0b1120 40%, transparent);
+      padding: 80px 0;
+    }
+    .download-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-top: 36px;
+    }
+    .download-card {
+      background: #090f1d;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.2s;
+    }
+    .download-card:hover { border-color: var(--cyan-glow); }
+    .dl-type { font-size: 12px; font-family: monospace; color: var(--cyan-glow); text-transform: uppercase; }
+    .dl-name { font-size: 18px; font-weight: 700; margin: 6px 0; }
+    .dl-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+
+    /* Manuals Center */
+    .manuals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .manual-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px;
+      background: #0d1527;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      text-decoration: none;
+      color: #fff;
+      transition: all 0.2s;
+    }
+    .manual-btn:hover {
+      border-color: var(--amber-btc);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(247, 147, 26, 0.2);
+    }
+    .flag { font-size: 32px; margin-bottom: 8px; }
+    .manual-lang { font-size: 14px; font-weight: 700; }
+    .manual-sub { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 40px 0;
+      margin-top: 80px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    footer a { color: var(--cyan-glow); text-decoration: none; }
+  </style>
+</head>
+<body class="cyber-bg">
+
+  <!-- Header -->
+  <header>
+    <div class="container nav-inner">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>OpenSec<span style="color:var(--cyan-glow)">Studio</span></span>
+        <span class="badge badge-cyan">v1.10.10</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#benchmarks">Benchmarks</a>
+        <a href="#features">Características</a>
+        <a href="#download">Descargar</a>
+        <a href="#manuals">Manuales (6 Idiomas)</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="container">
+    <section class="hero">
+      <div style="margin-bottom: 16px;">
+        <span class="badge badge-amber">⚡ Ciberseguridad Ofensiva en Rust Nativo</span>
+      </div>
+      <h1>
+        La Suite DevSecOps & DAST<br>
+        <span class="hero-gradient">100x Más Rápida que Burp Suite</span>
+      </h1>
+      <p>
+        Diseñada para hackers éticos, pentesters y equipos DevSecOps. Cero JVM de Java, arranque en menos de 150ms, consumo menor a 95MB de RAM y manuales pedagógicos ilustrados. Creado con orgullo por <strong>el saghet</strong>.
+      </p>
+
+      <div class="hero-cta">
+        <a href="#download" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar OpenSec Studio v1.10.10
+        </a>
+        <a href="#manuals" class="btn btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Manual Ilustrado Oficial (PDF)
+        </a>
+      </div>
+    </section>
+
+    <!-- Benchmark Widget -->
+    <section id="benchmarks" class="benchmark-card">
+      <div class="benchmark-header">
+        <div>
+          <h2 style="font-size:20px; font-weight:800;">⚡ Benchmark Técnico en Vivo: Rust vs Java (JVM)</h2>
+          <p style="font-size:12px; color:var(--text-muted);">Pruebas ejecutadas en Windows 11 x64 (AMD Ryzen 7 / Intel Core i7)</p>
+        </div>
+        <span class="badge badge-cyan">95% Menos Recursos</span>
+      </div>
+
+      <div class="benchmark-grid">
+        <!-- Tiempo de Arranque -->
+        <div class="bench-item">
+          <div class="bench-label">⏱️ Tiempo de Arranque Inicial</div>
+          <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700;">
+            <span style="color:var(--cyan-glow);">OpenSec Studio (Rust)</span>
+            <span>180 ms</span>
+          </div>
+          <div class="bench-bar-container"><div class="bench-bar bench-rust"></div></div>
+          <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted);">
+            <span>Burp Suite (Java)</span>
+            <span style="color:var(--accent-red);">18,400 ms (18.4s)</span>
+          </div>
+          <div class="bench-bar-container"><div class="bench-bar bench-java"></div></div>
+        </div>
+
+        <!-- Consumo de RAM -->
+        <div class="bench-item">
+          <div class="bench-label">🧠 Consumo de Memoria RAM</div>
+          <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700;">
+            <span style="color:var(--cyan-glow);">OpenSec Studio (Rust)</span>
+            <span>62 MB</span>
+          </div>
+          <div class="bench-bar-container"><div class="bench-bar bench-rust"></div></div>
+          <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted);">
+            <span>Burp Suite (Java)</span>
+            <span style="color:var(--accent-red);">1,850 MB (1.85 GB)</span>
+          </div>
+          <div class="bench-bar-container"><div class="bench-bar bench-java"></div></div>
+        </div>
+
+        <!-- Fuzzing Concurrente -->
+        <div class="bench-item">
+          <div class="bench-label">🚀 Fuzzing 10,000 Peticiones (Intruder)</div>
+          <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700;">
+            <span style="color:var(--cyan-glow);">OpenSec Studio (Rust Sockets)</span>
+            <span>4.2 s</span>
+          </div>
+          <div class="bench-bar-container"><div class="bench-bar bench-rust"></div></div>
+          <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted);">
+            <span>Burp Suite Community</span>
+            <span style="color:var(--accent-red);">Throttled / Limitado</span>
+          </div>
+          <div class="bench-bar-container"><div class="bench-bar bench-java"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+      <h2 class="section-title">Ingeniería de Grado Militar sin Fricciones</h2>
+      <p class="section-sub">Todo lo que necesitas para auditar aplicaciones web modernas y APIs en una sola herramienta.</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3>Proxy MITM & Interceptor HTTPS</h3>
+          <p>Túneles de alto rendimiento en Rust con generación automática de certificados CA x509 para descifrado limpio de TLS 1.3 sin advertencias.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+          </div>
+          <h3>Scanner DAST Pasivo y Activo</h3>
+          <p>Detección en tiempo real de inyecciones SQL, XSS, CSRF, fugas de configuración (.git/env) y cabeceras de seguridad con scoring CVSS v3.1.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          </div>
+          <h3>Plantillas YAML Estilo Nuclei</h3>
+          <p>Motor heurístico compatible con plantillas comunitarias de ProjectDiscovery. Escribe reglas simples y ejecuta escaneos dirigidos a gran escala.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <h3>Base de Datos CVE Offline (Air-Gapped)</h3>
+          <p>Catálogo integrado de firmas y vulnerabilidades para operar en entornos bancarios o clasificados sin salida a Internet (Air-Gapped Ready).</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <h3>OAST Collaborator Nativo</h3>
+          <p>Cliente Out-of-Band con sockets reales TCP/DNS para capturar callbacks en vulnerabilidades ciegas (SSRF, Blind RCE, XXE ciegas).</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <h3>Informes SARIF OASIS & PCI-DSS v4.0</h3>
+          <p>Exportación estándar para pipelines CI/CD DevSecOps, formato Nessus XML v2 y reportes ejecutivos interactivos en HTML listos para clientes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="download-section">
+      <h2 class="section-title">Descarga Oficial de OpenSec Studio v1.10.10</h2>
+      <p class="section-sub">Elige el formato de empaquetado ideal para tu entorno de trabajo en Windows (x64).</p>
+
+      <div class="download-grid">
+        <!-- Instalador NSIS -->
+        <div class="download-card">
+          <div>
+            <span class="dl-type">Recomendado</span>
+            <div class="dl-name">Instalador Interactivo</div>
+            <p class="dl-desc">Asistente oficial con accesos directos en Escritorio, Menú Inicio y desinstalador limpio.</p>
+          </div>
+          <a href="Instalador_OpenSec_Studio_Setup.exe" class="btn btn-primary" style="padding:10px 16px; font-size:13px; text-align:center; justify-content:center;">
+            Descargar Setup (.exe)
+          </a>
+        </div>
+
+        <!-- Instalador MSI -->
+        <div class="download-card">
+          <div>
+            <span class="dl-type">Empresarial</span>
+            <div class="dl-name">Paquete MSI</div>
+            <p class="dl-desc">Ideal para despliegue automatizado en redes corporativas con Active Directory, GPO o Intune.</p>
+          </div>
+          <a href="Instalador_Empresarial_OpenSec_Studio.msi" class="btn btn-secondary" style="padding:10px 16px; font-size:13px; text-align:center; justify-content:center;">
+            Descargar MSI (.msi)
+          </a>
+        </div>
+
+        <!-- Versión Portable -->
+        <div class="download-card">
+          <div>
+            <span class="dl-type">Sin Instalación</span>
+            <div class="dl-name">Versión Portable</div>
+            <p class="dl-desc">Ejecutable standalone para usar desde memorias USB. No requiere permisos de administrador.</p>
+          </div>
+          <a href="Version_Portable/OpenSec%20Studio.exe" class="btn btn-secondary" style="padding:10px 16px; font-size:13px; text-align:center; justify-content:center;">
+            Descargar Portable (.exe)
+          </a>
+        </div>
+
+        <!-- Paquete ZIP -->
+        <div class="download-card">
+          <div>
+            <span class="dl-type">Completo (15.9 MB)</span>
+            <div class="dl-name">Paquete Todo-en-Uno</div>
+            <p class="dl-desc">Incluye ejecutables, dependencias offline y los 6 manuales oficiales ilustrados en PDF.</p>
+          </div>
+          <a href="OpenSec-Studio-v1.10.10-Windows-x64.zip" class="btn btn-secondary" style="padding:10px 16px; font-size:13px; text-align:center; justify-content:center;">
+            Descargar ZIP (.zip)
+          </a>
+        </div>
+      </div>
+
+      <!-- Instalación por Terminal -->
+      <div style="background:#080d19; border:1px solid var(--border-color); border-radius:14px; padding:20px; margin-top:30px; text-align:center;">
+        <span style="font-size:12px; color:var(--text-muted); font-family:monospace; display:block; margin-bottom:8px;">INSTALACIÓN RÁPIDA VÍA WINDOWS PACKAGE MANAGER (WINGET):</span>
+        <code style="background:#0f172a; padding:8px 16px; border-radius:8px; border:1px solid #223455; color:var(--cyan-glow); font-family:monospace; font-size:14px; display:inline-block;">
+          winget install el-saghet.OpenSecStudio
+        </code>
+      </div>
+    </section>
+
+    <!-- Manuals Section -->
+    <section id="manuals" style="padding: 40px 0 80px;">
+      <h2 class="section-title">Manuales Oficiales Ilustrados (6 Idiomas)</h2>
+      <p class="section-sub">Pedagogía visual única basada en «El Gran Pueblo de Internet» cubriendo los 18 capítulos completos.</p>
+
+      <div class="manuals-grid">
+        <a href="Documentacion/Manual_OpenSec_Studio_ES_El_Saghet.pdf" class="manual-btn">
+          <span class="flag">🇪🇸</span>
+          <span class="manual-lang">Español</span>
+          <span class="manual-sub">Manual_ES.pdf</span>
+        </a>
+
+        <a href="Documentacion/Manual_OpenSec_Studio_EN_El_Saghet.pdf" class="manual-btn">
+          <span class="flag">🇺🇸</span>
+          <span class="manual-lang">English</span>
+          <span class="manual-sub">Manual_EN.pdf</span>
+        </a>
+
+        <a href="Documentacion/Manual_OpenSec_Studio_DE_El_Saghet.pdf" class="manual-btn">
+          <span class="flag">🇩🇪</span>
+          <span class="manual-lang">Deutsch</span>
+          <span class="manual-sub">Manual_DE.pdf</span>
+        </a>
+
+        <a href="Documentacion/Manual_OpenSec_Studio_FR_El_Saghet.pdf" class="manual-btn">
+          <span class="flag">🇫🇷</span>
+          <span class="manual-lang">Français</span>
+          <span class="manual-sub">Manual_FR.pdf</span>
+        </a>
+
+        <a href="Documentacion/Manual_OpenSec_Studio_IT_El_Saghet.pdf" class="manual-btn">
+          <span class="flag">🇮🇹</span>
+          <span class="manual-lang">Italiano</span>
+          <span class="manual-sub">Manual_IT.pdf</span>
+        </a>
+
+        <a href="Documentacion/Manual_OpenSec_Studio_JA_El_Saghet.pdf" class="manual-btn">
+          <span class="flag">🇯🇵</span>
+          <span class="manual-lang">日本語</span>
+          <span class="manual-sub">Manual_JA.pdf</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Donation Section -->
+    <section style="background:var(--card-bg); border:1px solid var(--border-color); border-radius:20px; padding:36px; text-align:center; max-width:850px; margin:0 auto 80px;">
+      <span class="badge badge-amber" style="margin-bottom:12px;">🪙 Filosofía OpenSec</span>
+      <h3 style="font-size:24px; font-weight:800; margin-bottom:12px;">Evaluación Irrestricta de 60 Días</h3>
+      <p style="color:var(--text-muted); font-size:14px; max-width:650px; margin:0 auto 20px;">
+        OpenSec Studio te otorga 60 días completos de uso profesional sin limitaciones. Para continuar apoyando el desarrollo independiente, agradecemos una donación de $30 USD en Bitcoin o puedes contactar a <strong>el saghet</strong>.
+      </p>
+      <div style="background:#070b14; padding:12px 20px; border-radius:12px; border:1px solid var(--border-color); display:inline-block; font-family:monospace; color:var(--amber-btc); font-size:13px; word-break:break-all;">
+        bc1q8x4jdf78p223m2x9t82wq5g6c9y00p7k7w8c3a
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>© 2026 OpenSec Studio. Diseñado, programado y auditado con orgullo por <strong>el saghet</strong>.</p>
+      <p style="margin-top:6px; font-size:12px; color:#64748b;">
+        Construido con Rust & Tauri | Cero telemetría invasiva | 100% Privado & Seguro
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

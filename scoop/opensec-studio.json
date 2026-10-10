@@ -1,0 +1,33 @@
+{
+  "version": "1.10.10",
+  "description": "Ultra-fast native DevSecOps, DAST security workbench and HTTP proxy in Rust by el saghet.",
+  "homepage": "https://github.com/saghet/opensec-studio",
+  "license": {
+    "identifier": "Freeware / Evaluated",
+    "url": "https://github.com/saghet/opensec-studio/blob/main/LICENSE"
+  },
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/saghet/opensec-studio/releases/download/v1.10.10/OpenSec-Studio-v1.10.10-Windows-x64.zip",
+      "hash": "50e493990d255d74e914373eff11dd91646106fe7ebe747804007f75ff1dbe7d",
+      "extract_dir": "OpenSec-Studio-v1.10.10-Windows-x64\\Version_Portable"
+    }
+  },
+  "bin": [
+    "OpenSec Studio.exe"
+  ],
+  "shortcuts": [
+    [
+      "OpenSec Studio.exe",
+      "OpenSec Studio"
+    ]
+  ],
+  "checkver": "github",
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/saghet/opensec-studio/releases/download/v$version/OpenSec-Studio-v$version-Windows-x64.zip"
+      }
+    }
+  }
+}

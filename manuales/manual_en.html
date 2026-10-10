@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Official Illustrated Guide to OpenSec Studio - el saghet</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    @page {
+      size: A4;
+      margin: 1.6cm 1.4cm 1.6cm 1.4cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 8.5pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "OpenSec Studio v1.10.10 • Developed by el saghet";
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 8pt;
+        color: #94a3b8;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1e293b;
+      background: #ffffff;
+      line-height: 1.55;
+      font-size: 9.5pt;
+    }
+
+    .cover-page {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      padding: 3rem 2rem 2rem 2rem;
+      background: linear-gradient(145deg, #0b1329 0%, #171d3d 50%, #0b1329 100%);
+      color: #ffffff;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover-page::before {
+      content: "";
+      position: absolute;
+      top: -20%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .cover-header {
+      z-index: 2;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(129, 140, 248, 0.4);
+      color: #a5b4fc;
+      border-radius: 9999px;
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .cover-title {
+      font-size: 30pt;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 0.8rem;
+      background: linear-gradient(to right, #ffffff, #c7d2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cover-subtitle {
+      font-size: 13pt;
+      color: #94a3b8;
+      font-weight: 400;
+      max-width: 85%;
+      line-height: 1.4;
+      margin-bottom: 1.8rem;
+    }
+
+    .shield-icon {
+      width: 100px;
+      height: 100px;
+      margin: 1.2rem 0;
+      filter: drop-shadow(0 10px 15px rgba(99, 102, 241, 0.4));
+    }
+
+    .cover-meta {
+      z-index: 2;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .author-highlight {
+      font-size: 13pt;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+
+    .author-label {
+      font-size: 8.5pt;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .chapter {
+      page-break-before: always;
+      padding-top: 0.8rem;
+    }
+
+    h1, h2, h3, h4 {
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: 16.5pt;
+      margin-bottom: 0.7rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 2px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2 {
+      font-size: 12.5pt;
+      margin-top: 1.1rem;
+      margin-bottom: 0.45rem;
+      color: #334155;
+    }
+
+    h3 {
+      font-size: 10.5pt;
+      margin-top: 0.7rem;
+      margin-bottom: 0.25rem;
+    }
+
+    p {
+      margin-bottom: 0.65rem;
+      color: #334155;
+      text-align: justify;
+    }
+
+    .card-metaphor {
+      background: #f8fafc;
+      border-left: 4px solid #6366f1;
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+      margin: 0.8rem 0;
+    }
+
+    .card-metaphor-title {
+      font-weight: 700;
+      color: #4f46e5;
+      font-size: 9.5pt;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mission-box {
+      background: #eff6ff;
+      border: 1px dashed #3b82f6;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 0.8rem 0;
+    }
+
+    .mission-header {
+      font-weight: 800;
+      color: #1d4ed8;
+      font-size: 9.5pt;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ui-diagram {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.2pt;
+      line-height: 1.25;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 0.8rem 0;
+      overflow-x: auto;
+      white-space: pre;
+      border: 1px solid #1e293b;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.8rem 0;
+      font-size: 8.5pt;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    td b {
+      color: #1e293b;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: #f1f5f9;
+      color: #0284c7;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+    }
+
+    ul, ol {
+      margin-left: 1.4rem;
+      margin-bottom: 0.65rem;
+      color: #334155;
+    }
+
+    li {
+      margin-bottom: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PORTADA -->
+  <div class="cover-page">
+    <div class="cover-header">
+      <div class="badge">OpenSec Studio v1.10.10 Official Release</div>
+      <h1 class="cover-title">Official Illustrated Guide to OpenSec Studio</h1>
+      <p class="cover-subtitle">The Cybersecurity, Web Audit & DevSecOps Suite Explained for Everyone</p>
+      
+      <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="url(#shieldGrad)" stroke="#818cf8"/>
+        <path d="M9 12l2 2 4-4" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="shieldGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#4f46e5" stop-opacity="0.8"/>
+            <stop offset="1" stop-color="#06b6d4" stop-opacity="0.8"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="cover-meta">
+      <div>
+        <div class="author-label">Creator & Lead Software Architect</div>
+        <div class="author-highlight">el saghet</div>
+      </div>
+      <div style="text-align: right;">
+        <div class="author-label">October 2026</div>
+        <div style="font-size: 10.5pt; color: #cbd5e1; font-weight: 600;">OpenSec Security Engineering</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÍNDICE -->
+  <div class="chapter">
+    <h1>📚 Table of Contents</h1>
+    <ol>
+      <li><b>📖 Prologue: The Great Internet Village</b></li>
+      <li><b>Capítulo 1:</b> First Flight & Screen Anatomy</li><li><b>Capítulo 2:</b> The Dashboard Control Panel</li><li><b>Capítulo 3:</b> The Customs Officer (HTTP Interceptor & HTTPS Tunnels)</li><li><b>Capítulo 4:</b> The Captain's Logbook (HTTP History)</li><li><b>Capítulo 5:</b> The Magic Photocopier (Native Rust Repeater)</li><li><b>Capítulo 6:</b> The Key-Testing Robot (Intruder)</li><li><b>Capítulo 7:</b> The Live Security Inspector (DAST Scanner & YAML Templates)</li><li><b>Capítulo 8:</b> The Door Knocker & Locksmith (Port Scanner & SSH Audit)</li><li><b>Capítulo 9:</b> The Magic Recipe Book (Nuclei-Style YAML Templates)</li><li><b>Capítulo 10:</b> The Universal Translator (Decoder)</li><li><b>Capítulo 11:</b> The Building Materials Inspector (Live SCA Audit)</li><li><b>Capítulo 12:</b> The Treasure Map (SiteMap & JS Spider)</li><li><b>Capítulo 13:</b> The Spy Postman (OAST Collaborator Client)</li><li><b>Capítulo 14:</b> The Time Machine & the Judge (Diffing & PCI-DSS Audit)</li><li><b>Capítulo 15:</b> The Great Secret Encyclopedia (Offline CVE Feeds)</li><li><b>Capítulo 16:</b> The Secret Mission Safe (.opensec Projects)</li><li><b>Capítulo 17:</b> The Extension & Tool Store (BApp Community Store)</li><li><b>Capítulo 18:</b> SSL Certificates, 60-Day Trial, $30 BTC Donation & Credits</li>
+    </ol>
+  </div>
+
+  <!-- PRÓLOGO -->
+  <div class="chapter">
+    <h1>📖 Prologue: The Great Internet Village</h1>
+    <div class="card-metaphor">
+      <div class="card-metaphor-title">🏘️ The metaphor of letters and shops</div>
+      <p>Imagine that the <b>Internet</b> is a bustling village full of houses and shops:</p>
+      <ul>
+        <li><b>Your Web Browser:</b> You walking down the high street asking for things.</li>
+        <li><b>The Web Server:</b> A shop attended by shopkeepers behind the counter.</li>
+        <li><b>An HTTP Request:</b> A handwritten letter you send saying: <i>"Please show me the toy catalog"</i>.</li>
+        <li><b>An HTTP Response:</b> The parcel the shop returns containing what you asked for.</li>
+      </ul>
+    </div>
+
+    <h2>What is OpenSec Studio?</h2>
+    <p>It is your <b>magic detective backpack</b> crafted by <b>el saghet</b>. Inside it, you carry tools to intercept letters mid-air (Interceptor), duplicate and send them a thousand times (Repeater), test key combinations (Intruder), check castle gates (DAK Scanner & Port Scanner), audit server configurations (SSH Host Audit), and consult a secret encyclopedia with over 1,200 threats even on airplane mode (Offline Feed).</p>
+
+    <div class="mission-box">
+      <div class="mission-header">🌟 Fundamental Principle: 100% Real, Zero Mock Data</div>
+      <p>In OpenSec Studio no button is a placeholder or mock simulation. Every single action executes native Rust code, communicates over live network sockets, and processes authentic packets.</p>
+    </div>
+  </div>
+
+  
+    <!-- ================= CAPÍTULO 1 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 1: First Flight & Screen Anatomy</h1>
+      <p>Go to your Windows Desktop or root folder and double-click <code>OpenSec Studio.exe</code>. The window opens instantly, hardware-accelerated and in focus.</p>
+      
+      
+      <h2>Visual Interface Anatomy:</h2>
+      <div class="ui-diagram">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 🛡️ OpenSec Studio | URL: [http://localhost:3000] | [Proxy ON] [Intercept] ℹ │ <- HEADER
+├──────────────┬──────────────────────────────────────────────────────────────┤
+│ 📊 Dashboard │                                                              │
+│ 🛑 Intercept │                                                              │
+│ 📜 Historial │                                                              │
+│ 🔁 Repeater  │                 MAIN WORKSPACE / ÁREA PRINCIPAL              │
+│ 🎯 Intruder  │                 (Missions & Security Telemetry)              │
+│ 🔍 Scanner   │                                                              │
+│ 🚪 Puertos   │                                                              │
+│ 🧩 Plugins   │                                                              │
+├──────────────┴──────────────────────────────────────────────────────────────┤
+│ 🟢 Offline DB v2026.10.10 | OpenSec Studio v1.10.10 • Developed by el saghet                               │ <- FOOTER
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>1. Header (Top Bar)</b></td>
+            <td>Quick controls: Target URL, Proxy ON/OFF toggle, Intercept state, and About info (ℹ️).</td>
+            <td>The steering wheel and dashboard switches.</td>
+          </tr>
+          
+          <tr>
+            <td><b>2. Sidebar (Navigation)</b></td>
+            <td>Instant navigation across all 18 cybersecurity modules.</td>
+            <td>Your organized tool rack.</td>
+          </tr>
+          
+          <tr>
+            <td><b>3. Central Workspace</b></td>
+            <td>Displays code editors, traffic grids, metrics, charts, and audit findings.</td>
+            <td>Your detective workbench and lab.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 1: The Official Badge</div>
+        <p>Click the <b>ℹ️</b> button in the top right corner. The official modal will display version <b>v1.10.10</b> and credits to <b>el saghet</b>.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 2 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 2: The Dashboard Control Panel</h1>
+      <p>The Dashboard brings together all live audit telemetry in real-time.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🚗 Speedometer and Gauges</div>
+        <p>Just like the cockpit of a sports car, it indicates network speed, engine status, and immediate road hazards.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Total Requests</b></td>
+            <td>Cumulative count of inspected network traffic.</td>
+            <td>Total miles driven.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Critical Vulnerabilities</b></td>
+            <td>Red flashing alert for severe flaws needing immediate fixes.</td>
+            <td>Check-engine warning light.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Security Score</b></td>
+            <td>Global percentage security posture of the target.</td>
+            <td>Vehicle overall health status.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 2: Engage the Radar</div>
+        <p>Click the primary Proxy switch. Notice the status transition from "Paused" to vibrant green "Active".</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 3 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 3: The Customs Officer (HTTP Interceptor & HTTPS Tunnels)</h1>
+      <p>The Interceptor sits between your browser and the remote server to inspect packets before transmission.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🛑 The customs inspector with a clipboard</div>
+        <p>Before a letter travels, the guard catches it mid-air. You can read it, edit contents with a pencil, and decide whether to Forward or Drop it.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Intercept is ON / OFF</b></td>
+            <td>Enables or pauses the mandatory packet inspection halt.</td>
+            <td>Lowering or raising the tollgate barrier.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Forward (Proceed)</b></td>
+            <td>Sends the edited letter onwards to the destination server.</td>
+            <td>Waving the inspected vehicle through.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Drop (Discard)</b></td>
+            <td>Terminates transmission and closes the socket connection.</td>
+            <td>Confiscating and destroying suspect cargo.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 3: Edit a Message in Mid-Air</div>
+        <p>Enable interception, submit a form in your browser, alter a field value inside OpenSec, and click Forward.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 4 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 4: The Captain's Logbook (HTTP History)</h1>
+      <p>Immutably captures every single request and response processed through OpenSec Studio.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">📜 The royal archivist ledger</div>
+        <p>Every letter sent is logged with timestamp, HTTP method, URL, payload size, and color-coded status codes.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>200 OK (Green)</b></td>
+            <td>The shop fulfilled the order smoothly.</td>
+            <td>Successful package delivery.</td>
+          </tr>
+          
+          <tr>
+            <td><b>404 / 403 (Amber)</b></td>
+            <td>Resource missing or door locked.</td>
+            <td>Missing address or restricted room.</td>
+          </tr>
+          
+          <tr>
+            <td><b>500 Error (Red)</b></td>
+            <td>Server suffered an internal failure.</td>
+            <td>Kitchen fire in the shop backroom.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 4: Filter Sensitive Traffic</div>
+        <p>Type "/api" in the History filter bar to immediately isolate backend web service endpoints.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 5 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 5: The Magic Photocopier (Native Rust Repeater)</h1>
+      <p>Dispatches authentic HTTP requests via native Rust sockets with millisecond latency calculation.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🔁 The instant cloning machine</div>
+        <p>Instead of retyping a web form 100 times, the copier allows modifying a single header or parameter and firing it instantly.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Multi-Tab Workspace</b></td>
+            <td>Enables concurrent work on multiple endpoints.</td>
+            <td>Multiple open sheets on your desk.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Send Button</b></td>
+            <td>Fires the raw request over the native Rust engine.</td>
+            <td>Pushing the copier start button.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Split-View Viewer</b></td>
+            <td>Displays request on the left and response on the right.</td>
+            <td>Side-by-side letter comparison.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 5: Hidden Header Inspection</div>
+        <p>Send a request to your test endpoint and observe the exact millisecond round-trip time in the response tab.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 6 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 6: The Key-Testing Robot (Intruder)</h1>
+      <p>Automated fuzzing and dictionary brute-force engine capable of high-throughput concurrent payload delivery.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🤖 The high-speed locksmith automaton</div>
+        <p>Given a padlock and a sack of 1,000 keys, the robot tests every key in split seconds and flags which one unlocked the door.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Markers §payload§</b></td>
+            <td>Marks the injection positions in the request template.</td>
+            <td>Drawing a red cross where the key inserts.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Sniper Mode</b></td>
+            <td>Tests the wordlist against one position at a time.</td>
+            <td>A sharpshooter targeting one spot.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Cluster Bomb Mode</b></td>
+            <td>Tests all combinations of usernames and passwords.</td>
+            <td>Testing every key against every lock.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 6: Discover Hidden Endpoints</div>
+        <p>Configure a wordlist attack with paths (admin, backup, login) and look for differing response status codes.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 7 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 7: The Live Security Inspector (DAST Scanner & YAML Templates)</h1>
+      <p>Dynamic application vulnerability scanning detecting OWASP Top 10, SQLi, and Cross-Site Scripting.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🔍 The bloodhound with a magnifying glass</div>
+        <p>The inspector checks every wall, window, and padlock searching for vulnerabilities the builders forgot to secure.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Passive Scan</b></td>
+            <td>Analyzes headers and responses without aggressive injection.</td>
+            <td>Inspecting from the sidewalk without touching.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Active Scan</b></td>
+            <td>Sends targeted security payloads to confirm vulnerabilities.</td>
+            <td>Gently rattling the window to check its lock.</td>
+          </tr>
+          
+          <tr>
+            <td><b>SARIF & HTML Export</b></td>
+            <td>Generates OASIS-compliant reports for engineering teams.</td>
+            <td>The signed official detective verdict.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 7: Security Headers Audit</div>
+        <p>Launch a passive scan against localhost and notice missing Content-Security-Policy (CSP) detections.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 8 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 8: The Door Knocker & Locksmith (Port Scanner & SSH Audit)</h1>
+      <p>Scans all 65,535 TCP ports with asynchronous sockets and executes credentialed SSH host compliance checks.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🚪 Knocking on every door in the palace</div>
+        <p>Verifies which doors are open (80 HTTP, 443 HTTPS, 22 SSH) and identifies which service guards each gate.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Concurrent TCP Scan</b></td>
+            <td>High-speed port probe written in native Rust.</td>
+            <td>A team of messengers ringing bells together.</td>
+          </tr>
+          
+          <tr>
+            <td><b>SSH Host Audit</b></td>
+            <td>Evaluates Linux/Windows configurations against CIS Benchmarks.</td>
+            <td>Auditing the inner steel vault fortifications.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 8: Discover Open Web Ports</div>
+        <p>Run a port scan against 127.0.0.1 for ports 80-8088 and watch live discovered services populate.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 9 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 9: The Magic Recipe Book (Nuclei-Style YAML Templates)</h1>
+      <p>Create custom vulnerability detection rules using industry-standard declarative YAML syntax.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">📜 The book of magical recipes</div>
+        <p>Each template is a cooking recipe: it specifies what request to send and what string confirms a flaw.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Syntax-Highlighted Editor</b></td>
+            <td>Live template editing with real-time parser validation.</td>
+            <td>Writing spells with enchanted ink.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Matchers & Extractors</b></td>
+            <td>Pattern matching rules using strings or regular expressions.</td>
+            <td>The secret ingredient revealing the trap.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 9: Build a Custom Rule</div>
+        <p>Create a YAML template to detect exposed /.git/HEAD files and validate it in the live syntax checker.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 10 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 10: The Universal Translator (Decoder)</h1>
+      <p>Transforms text and payloads across multiple encodings: Base64, URL Encode, Hex, HTML entities, and Hashes.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🗝️ The detective Rosetta stone</div>
+        <p>Spies often encode messages so others cannot read them. The translator renders them instantly understandable.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>URL Encoding (%20)</b></td>
+            <td>Encodes spaces and special characters for web safety.</td>
+            <td>Packaging words safely for postal transit.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Base64 & Hex</b></td>
+            <td>Translates binary data into readable character strings.</td>
+            <td>Translating secret glyphs into known letters.</td>
+          </tr>
+          
+          <tr>
+            <td><b>SHA-256 / MD5 Hashes</b></td>
+            <td>Generates irreversible cryptographic fingerprints.</td>
+            <td>The unique biometric fingerprint of a letter.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 10: Decode a Base64 Token</div>
+        <p>Paste a Base64 string into the input pane, choose "Decode as Base64", and inspect the decoded cleartext output.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 11 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 11: The Building Materials Inspector (Live SCA Audit)</h1>
+      <p>Analyzes software dependency manifests (package.json) to detect outdated or compromised packages.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🧱 The brick and beam inspector</div>
+        <p>Checks whether building materials have known flaws or factory recalls.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Library CVE Correlation</b></td>
+            <td>Cross-references package versions with CVE databases.</td>
+            <td>Consulting the catalog of recalled materials.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Remediation Advice</b></td>
+            <td>Identifies the minimum secure version required.</td>
+            <td>The architect order to replace a cracked beam.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 11: Audit a Dependency Manifest</div>
+        <p>Load a package.json file into the SCA module and inspect the list of flagged component vulnerabilities.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 12 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 12: The Treasure Map (SiteMap & JS Spider)</h1>
+      <p>Builds a hierarchical tree of target endpoints through passive traffic inspection and client JavaScript parsing.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🗺️ The cartographer map of the realm</div>
+        <p>As you navigate, the cartographer charts every alleyway, storefront, and secret door discovered.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Hierarchical Tree</b></td>
+            <td>Groups endpoints by host, directory, and file name.</td>
+            <td>Branches of a family tree.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Passive JS Route Extractor</b></td>
+            <td>Discovers hidden API routes inside frontend JavaScript scripts.</td>
+            <td>Uncovering secret notes written by the builders.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 12: Explore Server Structure</div>
+        <p>Browse through a web app with the proxy on and observe how the SiteMap automatically constructs the directory layout.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 13 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 13: The Spy Postman (OAST Collaborator Client)</h1>
+      <p>Out-of-Band testing client detecting blind vulnerabilities (Blind SSRF, Log4Shell, Out-of-Band SQLi).</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🔔 The trap with a secret bell</div>
+        <p>You leave a letter containing a secret return address. If the server accesses it, the bell rings and you confirm the flaw.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Unique Domain Generator</b></td>
+            <td>Generates correlation IDs for payload tracking.</td>
+            <td>The secret serial number on the trap.</td>
+          </tr>
+          
+          <tr>
+            <td><b>DNS & HTTP Interaction Log</b></td>
+            <td>Shows when and from which IP the server visited the payload.</td>
+            <td>The bell alerting you when the trap was sprung.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 13: Deploy an OAST Trap</div>
+        <p>Generate a collaborator payload and watch incoming DNS/HTTP interactions appear in real-time.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 14 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 14: The Time Machine & the Judge (Diffing & PCI-DSS Audit)</h1>
+      <p>Compares previous audit scans with new runs to track fixed versus persistent flaws and calculates regulatory compliance.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">⚖️ The scales of justice and the time capsule</div>
+        <p>Compares yesterday photograph with today to reward fixed flaws and flag new regressions.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Vulnerability Diffing</b></td>
+            <td>Categorizes flaws as Fixed, New, or Persistent.</td>
+            <td>The checklist of completed and outstanding tasks.</td>
+          </tr>
+          
+          <tr>
+            <td><b>PCI-DSS v4.0 Compliance</b></td>
+            <td>Computes overall banking industry security adherence.</td>
+            <td>The official test score from the regulatory judge.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 14: Compare Two Scans</div>
+        <p>Load two prior scan files and inspect how the diffing engine highlights resolved vulnerabilities in green.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 15 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 15: The Great Secret Encyclopedia (Offline CVE Feeds)</h1>
+      <p>Offline database of 1,200+ threats searchable in under 5 ms without requiring any active internet connection.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">📖 The secret encyclopedia in your backpack</div>
+        <p>A comprehensive handbook of digital villain tactics accessible inside air-gapped bunkers or during airplane flights.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Sub-5ms Search Engine</b></td>
+            <td>Optimized in-memory indexing for instantaneous querying.</td>
+            <td>Opening the book directly to the target page.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Automatic Delta Sync</b></td>
+            <td>Updates new CVE definitions when connected to the internet.</td>
+            <td>The courier delivering new volumes to your library.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 15: Search for a Critical Threat</div>
+        <p>Search for "Log4Shell" or "Spring4Shell" to read attack vectors and remediation code snippets.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 16 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 16: The Secret Mission Safe (.opensec Projects)</h1>
+      <p>Saves and restores complete investigations encrypted with AES-256-GCM and PBKDF2 key derivation.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🔒 The armored detective lockbox</div>
+        <p>Locks all your traffic history, notes, and Repeater tabs with password protection so no adversary can spy on your work.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Save Project (.opensec)</b></td>
+            <td>Serializes the entire workspace into an encrypted file.</td>
+            <td>Locking all evidence inside the vault.</td>
+          </tr>
+          
+          <tr>
+            <td><b>AES-256 Encryption</b></td>
+            <td>Guarantees confidentiality for enterprise audit data.</td>
+            <td>The unbreakable combination lock.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 16: Encrypt Your Investigation</div>
+        <p>Select "Save Project (.opensec)" from the top menu, assign a master passphrase, and inspect the created file.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 17 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 17: The Extension & Tool Store (BApp Community Store)</h1>
+      <p>Modular extension ecosystem allowing community security plugins to be installed or created in JSON format.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🧩 The detective accessory shop</div>
+        <p>Where you equip your backpack with new gadgets: special flashlights, decoders, or radar sensors.</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>1-Click Install</b></td>
+            <td>Dynamically enables or disables plugins.</td>
+            <td>Snapping an accessory onto your utility belt.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Load Local Plugins</b></td>
+            <td>Imports custom JSON extensions developed by your team.</td>
+            <td>Crafting your own gadget in the workshop.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 17: Browse the Plugin Store</div>
+        <p>Navigate to the Plugins tab, review available community tools, and enable an extension to enhance your workflow.</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 18 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 18: SSL Certificates, 60-Day Trial, $30 BTC Donation & Credits</h1>
+      <p>Root X.509 certificate management for HTTPS interception, 60-day continuous evaluation, and Bitcoin donation radar.</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🛡️ The diplomatic trust passport and honor plaque</div>
+        <p>The certificate is your diplomatic passport telling the browser: "Trust this officer, he is here to defend you".</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Function in OpenSec Studio</th>
+            <th>Metaphor to understand it</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>CA Root Certificate</b></td>
+            <td>Generates and installs trust certificates to inspect HTTPS without warnings.</td>
+            <td>The detective official wax seal.</td>
+          </tr>
+          
+          <tr>
+            <td><b>60-Day Evaluation Period</b></td>
+            <td>60 days of full unrestricted access protected by deep multi-anchor persistence.</td>
+            <td>Your two-month courtesy pass to explore the realm.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Bitcoin $30 USD Donation</b></td>
+            <td>Support independent software with live mempool payment detection.</td>
+            <td>Your contribution to the digital detectives guild.</td>
+          </tr>
+          
+          <tr>
+            <td><b>Authorship & Credits</b></td>
+            <td>Designed and crafted with pride by el saghet.</td>
+            <td>The artisan mark engraved into the tool.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ Detective Mission 18: The Official Honor Badge</div>
+        <p>Open the About OpenSec Studio modal and view the official badge: Developed by el saghet • Version v1.10.10 Official 2026.</p>
+      </div>
+    </div>
+    
+
+</body>
+</html>

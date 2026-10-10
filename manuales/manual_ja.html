@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>OpenSec Studio 公式図解ユーザーマニュアル - el saghet</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    @page {
+      size: A4;
+      margin: 1.6cm 1.4cm 1.6cm 1.4cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Noto Sans JP', sans-serif;
+        font-size: 8.5pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "OpenSec Studio v1.10.10 • 開発者: el saghet";
+        font-family: 'Noto Sans JP', sans-serif;
+        font-size: 8pt;
+        color: #94a3b8;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #1e293b;
+      background: #ffffff;
+      line-height: 1.55;
+      font-size: 9.5pt;
+    }
+
+    .cover-page {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      padding: 3rem 2rem 2rem 2rem;
+      background: linear-gradient(145deg, #0b1329 0%, #171d3d 50%, #0b1329 100%);
+      color: #ffffff;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover-page::before {
+      content: "";
+      position: absolute;
+      top: -20%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .cover-header {
+      z-index: 2;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(129, 140, 248, 0.4);
+      color: #a5b4fc;
+      border-radius: 9999px;
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .cover-title {
+      font-size: 30pt;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 0.8rem;
+      background: linear-gradient(to right, #ffffff, #c7d2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cover-subtitle {
+      font-size: 13pt;
+      color: #94a3b8;
+      font-weight: 400;
+      max-width: 85%;
+      line-height: 1.4;
+      margin-bottom: 1.8rem;
+    }
+
+    .shield-icon {
+      width: 100px;
+      height: 100px;
+      margin: 1.2rem 0;
+      filter: drop-shadow(0 10px 15px rgba(99, 102, 241, 0.4));
+    }
+
+    .cover-meta {
+      z-index: 2;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .author-highlight {
+      font-size: 13pt;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+
+    .author-label {
+      font-size: 8.5pt;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .chapter {
+      page-break-before: always;
+      padding-top: 0.8rem;
+    }
+
+    h1, h2, h3, h4 {
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: 16.5pt;
+      margin-bottom: 0.7rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 2px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2 {
+      font-size: 12.5pt;
+      margin-top: 1.1rem;
+      margin-bottom: 0.45rem;
+      color: #334155;
+    }
+
+    h3 {
+      font-size: 10.5pt;
+      margin-top: 0.7rem;
+      margin-bottom: 0.25rem;
+    }
+
+    p {
+      margin-bottom: 0.65rem;
+      color: #334155;
+      text-align: justify;
+    }
+
+    .card-metaphor {
+      background: #f8fafc;
+      border-left: 4px solid #6366f1;
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+      margin: 0.8rem 0;
+    }
+
+    .card-metaphor-title {
+      font-weight: 700;
+      color: #4f46e5;
+      font-size: 9.5pt;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mission-box {
+      background: #eff6ff;
+      border: 1px dashed #3b82f6;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 0.8rem 0;
+    }
+
+    .mission-header {
+      font-weight: 800;
+      color: #1d4ed8;
+      font-size: 9.5pt;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ui-diagram {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.2pt;
+      line-height: 1.25;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 0.8rem 0;
+      overflow-x: auto;
+      white-space: pre;
+      border: 1px solid #1e293b;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.8rem 0;
+      font-size: 8.5pt;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    td b {
+      color: #1e293b;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: #f1f5f9;
+      color: #0284c7;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+    }
+
+    ul, ol {
+      margin-left: 1.4rem;
+      margin-bottom: 0.65rem;
+      color: #334155;
+    }
+
+    li {
+      margin-bottom: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PORTADA -->
+  <div class="cover-page">
+    <div class="cover-header">
+      <div class="badge">OpenSec Studio v1.10.10 Official Release</div>
+      <h1 class="cover-title">OpenSec Studio 公式図解ユーザーマニュアル</h1>
+      <p class="cover-subtitle">開発者とDevSecOpsのためのサイバーセキュリティ＆Web診断スイート入門</p>
+      
+      <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="url(#shieldGrad)" stroke="#818cf8"/>
+        <path d="M9 12l2 2 4-4" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="shieldGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#4f46e5" stop-opacity="0.8"/>
+            <stop offset="1" stop-color="#06b6d4" stop-opacity="0.8"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="cover-meta">
+      <div>
+        <div class="author-label">創設者 & 首席ソフトウェアアーキテクト</div>
+        <div class="author-highlight">el saghet</div>
+      </div>
+      <div style="text-align: right;">
+        <div class="author-label">2026年10月</div>
+        <div style="font-size: 10.5pt; color: #cbd5e1; font-weight: 600;">OpenSec Security Engineering</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÍNDICE -->
+  <div class="chapter">
+    <h1>📚 目次 (Contents)</h1>
+    <ol>
+      <li><b>📖 プロローグ: インターネットの大村 (The Internet Village)</b></li>
+      <li><b>Capítulo 1:</b> 初回起動と画面構成 (Screen Anatomy)</li><li><b>Capítulo 2:</b> ダッシュボード (Dashboard)</li><li><b>Capítulo 3:</b> 税関の門番 (HTTP インターセプター & HTTPS トンネル)</li><li><b>Capítulo 4:</b> 航海日誌 (HTTP 履歴 / History)</li><li><b>Capítulo 5:</b> 魔法のコピー機 (ネイティブ Rust リピーター)</li><li><b>Capítulo 6:</b> 鍵テストロボット (Intruder / ブルートフォース)</li><li><b>Capítulo 7:</b> セキュリティ監査官 (DAST スキャナー & YAML)</li><li><b>Capítulo 8:</b> ドアノックと鍵師 (ポートスキャン & SSH 監査)</li><li><b>Capítulo 9:</b> 魔法のレシピ集 (Nuclei-Style YAML テンプレート)</li><li><b>Capítulo 10:</b> 万能翻訳機 (デコーダー / Decoder)</li><li><b>Capítulo 11:</b> 部品検査官 (SCA 依存関係リアルタイム監査)</li><li><b>Capítulo 12:</b> 宝の地図 (SiteMap & JS スパイダー)</li><li><b>Capítulo 13:</b> スパイ郵便配達員 (OAST コラボレーター)</li><li><b>Capítulo 14:</b> タイムマシンと裁判官 (Diffing & PCI-DSS 監査)</li><li><b>Capítulo 15:</b> 秘密の大百科事典 (オフライン CVE フィード)</li><li><b>Capítulo 16:</b> 秘密ミッション金庫 (.opensec プロジェクト保存)</li><li><b>Capítulo 17:</b> 拡張ツールショップ (BApp コミュニティストア)</li><li><b>Capítulo 18:</b> SSL証明書、60日間評価期間、BTC $30 寄付 & 公式クレジット</li>
+    </ol>
+  </div>
+
+  <!-- PRÓLOGO -->
+  <div class="chapter">
+    <h1>📖 プロローグ: インターネットの大村 (The Internet Village)</h1>
+    <div class="card-metaphor">
+      <div class="card-metaphor-title">🏘️ 手紙とお店のたとえ話</div>
+      <p><b>インターネット</b>を、たくさんの家や商店が立ち並ぶ大きな村だと想像してみてください：</p>
+      <ul>
+        <li><b>Webブラウザ:</b> 通りを歩いて買い物や注文をする「あなた自身」です。</li>
+        <li><b>Webサーバー:</b> カウンター越しにお客さんを迎える「お店」です。</li>
+        <li><b>HTTPリクエスト (要求):</b> <i>「おもちゃのカタログを見せてください」</i> と書いた「手紙」です。</li>
+        <li><b>HTTPレスポンス (返答):</b> お店が返してくれる「小包や商品」です。</li>
+      </ul>
+    </div>
+
+    <h2>OpenSec Studio とは？</h2>
+    <p><b>el saghet</b> によって作られた、あなたの「魔法の探偵リュック」です。手紙を空中でキャッチして書き換える (Interceptor)、手紙を瞬時に千回コピーして送る (Repeater)、千本の鍵を連続テストする (Intruder)、お城の窓やドアの施錠を調べる (Scanner)、そしてオフラインで1,200種類以上の脅威を調べられる大百科事典 (Offline Feed) が詰まっています。</p>
+
+    <div class="mission-box">
+      <div class="mission-header">🌟 基本理念: 100% リアル、シミュレーション一切なし</div>
+      <p>OpenSec Studio では飾りやダミーのボタンは一つもありません。すべての操作がネイティブの Rust コードを実行し、本物のネットワークパケットを送受信します。</p>
+    </div>
+  </div>
+
+  
+    <!-- ================= CAPÍTULO 1 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 1: 初回起動と画面構成 (Screen Anatomy)</h1>
+      <p>デスクトップの <code>OpenSec Studio.exe</code> をダブルクリックします。瞬時に高速起動します。</p>
+      
+      
+      <h2>画面インターフェースの全体図:</h2>
+      <div class="ui-diagram">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 🛡️ OpenSec Studio | URL: [http://localhost:3000] | [Proxy ON] [Intercept] ℹ │ <- HEADER
+├──────────────┬──────────────────────────────────────────────────────────────┤
+│ 📊 Dashboard │                                                              │
+│ 🛑 Intercept │                                                              │
+│ 📜 Historial │                                                              │
+│ 🔁 Repeater  │                 MAIN WORKSPACE / ÁREA PRINCIPAL              │
+│ 🎯 Intruder  │                 (Missions & Security Telemetry)              │
+│ 🔍 Scanner   │                                                              │
+│ 🚪 Puertos   │                                                              │
+│ 🧩 Plugins   │                                                              │
+├──────────────┴──────────────────────────────────────────────────────────────┤
+│ 🟢 Offline DB v2026.10.10 | OpenSec Studio v1.10.10 • 開発者: el saghet                               │ <- FOOTER
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>1. ヘッダー (上部バー)</b></td>
+            <td>対象URL入力、プロキシ開始/停止、インターセプト切替、情報 (ℹ️)。</td>
+            <td>車のハンドルとダッシュボード。</td>
+          </tr>
+          
+          <tr>
+            <td><b>2. サイドバー (左メニュー)</b></td>
+            <td>全18個のセキュリティモジュールへ瞬時に移動。</td>
+            <td>整頓された道具ラック。</td>
+          </tr>
+          
+          <tr>
+            <td><b>3. メイン作業エリア</b></td>
+            <td>リクエスト編集、パケット履歴、解析グラフ、診断レポート。</td>
+            <td>探偵の手術台と実験デスク。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 1: 公式クレジットの確認</div>
+        <p>右上の <b>ℹ️</b> アイコンをクリックしてください。バージョン <b>v1.10.10</b> と開発者 <b>el saghet</b> の証が表示されます。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 2 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 2: ダッシュボード (Dashboard)</h1>
+      <p>診断中のトラフィックとセキュリティ状態をリアルタイム集約。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🚗 スピードメーターと計器パネル</div>
+        <p>車のメーターのように、通信速度、エンジンの稼働、注意すべき危険度を一目で伝えます。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>総リクエスト数</b></td>
+            <td>検査したパケットの累計カウント。</td>
+            <td>車の走行距離計。</td>
+          </tr>
+          
+          <tr>
+            <td><b>重大な脆弱性</b></td>
+            <td>即時対処が必要な危険の赤色アラート。</td>
+            <td>エンジンの警告ランプ。</td>
+          </tr>
+          
+          <tr>
+            <td><b>セキュリティ指数</b></td>
+            <td>対象Webアプリの総合健全度スコア。</td>
+            <td>車の総合コンディション。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 2: レーダーの起動</div>
+        <p>メインプロキシのスイッチをクリックします。状態が鮮やかな緑色の「稼働中」に切り替わります。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 3 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 3: 税関の門番 (HTTP インターセプター & HTTPS トンネル)</h1>
+      <p>ブラウザとサーバーの間に入り、手紙が飛ぶ前に空中で一時停止させます。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🛑 メモ帳を持った親切な税関審査官</div>
+        <p>手紙が発送される直前に中身を読み、鉛筆で文字を書き換え、通す (Forward) か破棄する (Drop) か判断できます。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>Intercept ON / OFF</b></td>
+            <td>パケットの一時停止機能を有効化または解除。</td>
+            <td>料金所のバーを上げ下げする。</td>
+          </tr>
+          
+          <tr>
+            <td><b>Forward (通過)</b></td>
+            <td>編集した手紙を目的のサーバーへ送信。</td>
+            <td>検査をパスした車を通す。</td>
+          </tr>
+          
+          <tr>
+            <td><b>Drop (破棄)</b></td>
+            <td>通信を即座に中断して破棄。</td>
+            <td>怪しい荷物を没収して廃棄する。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 3: 空中で手紙を書き換える</div>
+        <p>インターセプトをONにし、ブラウザで送信したデータの一部を書き換えてから Forward を押してみましょう。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 4 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 4: 航海日誌 (HTTP 履歴 / History)</h1>
+      <p>送受信されたすべての通信を詳細に記録する不変ログ。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">📜 宮廷記録官の公式台帳</div>
+        <p>送られたすべての手紙が時間、メソッド、URL、サイズ、応答コードとともに色分け記録されます。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>200 OK (緑色)</b></td>
+            <td>注文が問題なく処理された成功コード。</td>
+            <td>荷物が無事に配達された。</td>
+          </tr>
+          
+          <tr>
+            <td><b>404 / 403 (橙色)</b></td>
+            <td>ページが存在しない、または施錠中。</td>
+            <td>宛先不明、または立入禁止。</td>
+          </tr>
+          
+          <tr>
+            <td><b>500 エラー (赤色)</b></td>
+            <td>サーバー内部で起きた故障。</td>
+            <td>お店のバックヤードでボヤ騒ぎ。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 4: 重要通信の絞り込み</div>
+        <p>履歴の検索バーに "/api" と入力し、Web API の通信だけを抽出してみましょう。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 5 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 5: 魔法のコピー機 (ネイティブ Rust リピーター)</h1>
+      <p>Rust のネイティブソケット経由で本物のHTTPパケットを高速反復送信。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🔁 瞬時クローン製造マシン</div>
+        <p>フォームを100回打ち直す代わりに、ヘッダーを1文字変えてボタン一つで何度でも再送できます。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>マルチタブ</b></td>
+            <td>複数のリクエストを同時に作業。</td>
+            <td>机の上に複数の手紙を並べる。</td>
+          </tr>
+          
+          <tr>
+            <td><b>Send ボタン</b></td>
+            <td>ネイティブ Rust エンジンで実パケットを発射。</td>
+            <td>コピー機のスタートボタン。</td>
+          </tr>
+          
+          <tr>
+            <td><b>分割ビュー</b></td>
+            <td>左にリクエスト、右にサーバーの応答。</td>
+            <td>手紙と返事の見比べ。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 5: 隠しヘッダーの観察</div>
+        <p>テストURLへリクエストを送信し、ミリ秒単位の正確な応答時間を確認してください。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 6 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 6: 鍵テストロボット (Intruder / ブルートフォース)</h1>
+      <p>辞書ファイルを用いた自動化ファジングと高速パケット送信エンジン。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🤖 超高速な鍵師アンドロイド</div>
+        <p>袋に入った1,000本の鍵をロボットが瞬時に差し替え、どの鍵で鍵穴が開くか自動判定します。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>マーカー §payload§</b></td>
+            <td>差し替えたい位置を指定。</td>
+            <td>鍵穴の位置に赤い印をつける。</td>
+          </tr>
+          
+          <tr>
+            <td><b>スナイパーモード</b></td>
+            <td>1か所ずつ順番に単語リストを試す。</td>
+            <td>1つの標的を正確に狙う狙撃手。</td>
+          </tr>
+          
+          <tr>
+            <td><b>クラスターボム</b></td>
+            <td>IDとパスワードのすべての組み合わせを総当たり。</td>
+            <td>すべての鍵穴にすべての鍵を試す。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 6: 隠しフォルダの発見</div>
+        <p>パス辞書 (admin, login など) を設定して実行し、サイズが異なる応答を見つけましょう。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 7 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 7: セキュリティ監査官 (DAST スキャナー & YAML)</h1>
+      <p>OWASP Top 10、SQL インジェクション、XSS を検出する動的診断エンジン。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🔍 虫眼鏡とノートを持った名探偵</div>
+        <p>家の壁や窓、鍵穴を一つ一つ調べ、施工ミスや施錠忘れがないかを調査します。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>パッシブスキャン</b></td>
+            <td>攻撃せず安全にヘッダーの不備を調査。</td>
+            <td>触らずに歩道から眺めて点検する。</td>
+          </tr>
+          
+          <tr>
+            <td><b>アクティブスキャン</b></td>
+            <td>安全な検証パケットを送り実際に穴があるか調査。</td>
+            <td>ドアを優しくノックして確認する。</td>
+          </tr>
+          
+          <tr>
+            <td><b>SARIF 出力</b></td>
+            <td>国際標準のセキュリティ診断レポート出力。</td>
+            <td>探偵の署名入り公式調査報告書。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 7: セキュリティヘッダー監査</div>
+        <p>ローカルサーバーに対してスキャンを実行し、CSP (Content-Security-Policy) の有無を確認します。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 8 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 8: ドアノックと鍵師 (ポートスキャン & SSH 監査)</h1>
+      <p>65,535個の全TCPポートを非同期スキャンし、SSH経由でホスト設定を監査。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🚪 お城のすべてのドアベルを鳴らす</div>
+        <p>どのドア (80番 HTTP, 443番 HTTPS, 22番 SSH) が開いていて誰が応答するか調べます。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>並行 TCP スキャン</b></td>
+            <td>Rust による超高速ポート調査。</td>
+            <td>探偵チーム全員で一斉にベルを鳴らす。</td>
+          </tr>
+          
+          <tr>
+            <td><b>SSH ホスト監査</b></td>
+            <td>CIS ベンチマーク基準による OS 設定診断。</td>
+            <td>お城の内側の金庫室の頑丈さを調べる。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 8: 開放ポートの特定</div>
+        <p>127.0.0.1 の 80〜8088 番ポートをスキャンし、発見されたサービスを一覧確認します。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 9 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 9: 魔法のレシピ集 (Nuclei-Style YAML テンプレート)</h1>
+      <p>業界標準の YAML 記法で独自の脆弱性検査ルールを記述・実行。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">📜 秘密の魔法調合法</div>
+        <p>「この手紙を送り、この文字が返ってきたら危険」というルールを記したレシピです。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>構文ハイライトエディタ</b></td>
+            <td>構文エラーをリアルタイム検知。</td>
+            <td>魔法のインクで呪文を書く。</td>
+          </tr>
+          
+          <tr>
+            <td><b>マッチャーと抽出器</b></td>
+            <td>文字列や正規表現による一致条件判定。</td>
+            <td>罠を見抜く特別な合言葉。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 9: オリジナルルールの作成</div>
+        <p>/.git/HEAD の露出を調べるルールを作成し、バリデーターで構文をテストします。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 10 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 10: 万能翻訳機 (デコーダー / Decoder)</h1>
+      <p>Base64、URL エンコード、16進数 (Hex)、ハッシュ値を自在に変換。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🗝️ 探偵のロゼッタストーン</div>
+        <p>スパイが暗号で書いた暗号文を、瞬時に誰でも読める普通の言葉に翻訳します。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>URL エンコード</b></td>
+            <td>特殊文字をネット送信用に変換。</td>
+            <td>手紙を安全な封筒にパッキングする。</td>
+          </tr>
+          
+          <tr>
+            <td><b>Base64 & Hex</b></td>
+            <td>バイナリデータを英数字文字列に変換。</td>
+            <td>暗号文字を普通の文字に戻す。</td>
+          </tr>
+          
+          <tr>
+            <td><b>SHA-256 ハッシュ</b></td>
+            <td>改ざん不可能なデータの指紋を計算。</td>
+            <td>手紙の指紋を採取する。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 10: Base64 の復号</div>
+        <p>Base64文字列を入力欄に貼り付け、「Decode as Base64」で元の文章を復元します。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 11 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 11: 部品検査官 (SCA 依存関係リアルタイム監査)</h1>
+      <p>package.json などのライブラリ定義をスキャンし、既知の脆弱性を検知。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🧱 レンガと鉄骨の建築検査官</div>
+        <p>家を建てた材料にリコール対象の不良品が混ざっていないかチェックします。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>CVE データベース照合</b></td>
+            <td>パッケージと脆弱性情報を瞬時にマッチング。</td>
+            <td>欠陥部品カタログと照らし合わせる。</td>
+          </tr>
+          
+          <tr>
+            <td><b>修正バージョンの提示</b></td>
+            <td>安全な推奨バージョンを案内。</td>
+            <td>建築士による部品交換の指示書。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 11: package.json の監査</div>
+        <p>プロジェクトの package.json を読み込ませ、危険なライブラリ警告を確認します。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 12 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 12: 宝の地図 (SiteMap & JS スパイダー)</h1>
+      <p>ブラウジングとJS解析から対象サイトの全エンドポイント階層ツリーを構築。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🗺️ 王国の詳細な地図</div>
+        <p>村を歩くたびに、地図職人が路地、裏口、隠し倉庫を自動で地図に書き足していきます。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>階層ツリー表示</b></td>
+            <td>ホスト、フォルダ、ファイルごとに整理。</td>
+            <td>家系図のような枝分かれ。</td>
+          </tr>
+          
+          <tr>
+            <td><b>パッシブ JS 解析</b></td>
+            <td>スクリプトから隠された内部APIルートを発掘。</td>
+            <td>設計図の余白に書かれた秘密の抜け道を見つける。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 12: サイト全体図の探索</div>
+        <p>プロキシ経由でWebサイトを巡回し、自動構築される SiteMap ツリーを観察します。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 13 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 13: スパイ郵便配達員 (OAST コラボレーター)</h1>
+      <p>画面に結果が出ないブラインド脆弱性 (Blind SSRF, Log4Shell) を検知。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🔔 秘密のベルがついた罠</div>
+        <p>相手に秘密の返信先を渡しておき、サーバーがそこにアクセスした瞬間にベルが鳴り響きます。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>一意なドメイン生成</b></td>
+            <td>攻撃テストごとの追跡用識別子を発行。</td>
+            <td>罠に刻まれた秘密のシリアル番号。</td>
+          </tr>
+          
+          <tr>
+            <td><b>DNS/HTTP 応答ログ</b></td>
+            <td>サーバーが罠を踏んだ時刻とIPをリアルタイム記録。</td>
+            <td>罠にかかったことを知らせるベルの音。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 13: OAST の罠を仕掛ける</div>
+        <p>テスト用アドレスを発行し、サーバーからの外部問い合わせが届く様子を確認します。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 14 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 14: タイムマシンと裁判官 (Diffing & PCI-DSS 監査)</h1>
+      <p>過去のスキャンと現在を比較し、PCI-DSS v4.0 基準のセキュリティ適合度を判定。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">⚖️ 正義の天秤とタイムカプセル</div>
+        <p>昨日の写真と今日の写真を比較し、直った箇所を褒め、新たな危険を注意します。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>脆弱性の差分比較</b></td>
+            <td>修正済み (Fixed)、新規 (New)、残存 (Persistent) に分類。</td>
+            <td>宿題の完了リストとやり残し。</td>
+          </tr>
+          
+          <tr>
+            <td><b>PCI-DSS v4.0 適合度</b></td>
+            <td>クレジットカード業界基準の適合率を算出。</td>
+            <td>裁判官による公式通知表。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 14: 2つの診断結果の比較</div>
+        <p>過去の診断結果を2つ読み込ませ、修正された項目が緑色で表示されるのを確認します。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 15 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 15: 秘密の大百科事典 (オフライン CVE フィード)</h1>
+      <p>1,200件以上の既知の脅威を5ミリ秒未満で超高速検索。オフライン完全対応。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">📖 リュックの中の秘密の大百科事典</div>
+        <p>ネットが繋がらない機内や地下シェルターでも、あらゆる脅威の手口を調べられます。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>超高速インメモリ検索</b></td>
+            <td>待ち時間なしで瞬時に絞り込み。</td>
+            <td>探したいページが一瞬で開く本。</td>
+          </tr>
+          
+          <tr>
+            <td><b>差分自動同期</b></td>
+            <td>ネット接続時に最新の脅威データを更新。</td>
+            <td>定期的に新しい巻を届けてくれる飛脚。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 15: 有名な脅威の調査</div>
+        <p>「Log4Shell」と検索し、攻撃手法と推奨修正コードを確認します。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 16 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 16: 秘密ミッション金庫 (.opensec プロジェクト保存)</h1>
+      <p>調査中の通信ログ、メモ、設定を AES-256-GCM 暗号化で丸ごと保存・復元。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🔒 探偵の頑丈な鋼鉄金庫</div>
+        <p>今日の調査メモや証拠をすべて金庫にしまい、暗証番号で施錠します。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>プロジェクト保存 (.opensec)</b></td>
+            <td>全ワークスペースを単一ファイルに暗号化。</td>
+            <td>証拠品を金庫に納めて鍵をかける。</td>
+          </tr>
+          
+          <tr>
+            <td><b>AES-256 暗号化</b></td>
+            <td>軍事機密レベルの厳重な機密保持。</td>
+            <td>決して破られないダイヤル錠。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 16: 調査の暗号化保存</div>
+        <p>「プロジェクトを保存」を選び、パスワードを設定して暗号化ファイルを保存します。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 17 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 17: 拡張ツールショップ (BApp コミュニティストア)</h1>
+      <p>コミュニティ製拡張機能のワンクリック導入と独自JSONプラグインの作成。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🧩 探偵のアタッチメント工房</div>
+        <p>リュックに新しい特殊ライトや特殊センサーを自由に追加できます。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>ワンクリック導入</b></td>
+            <td>プラグインを瞬時に有効化/無効化。</td>
+            <td>ベルトに新しい道具を装着する。</td>
+          </tr>
+          
+          <tr>
+            <td><b>独自プラグインの読込</b></td>
+            <td>自作したJSON定義のツールを組み込み。</td>
+            <td>工房で自作した道具を装着する。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 17: プラグインストアの体験</div>
+        <p>Plugins タブを開き、拡張機能を有効化して機能が追加される様子を確認します。</p>
+      </div>
+    </div>
+    
+    <!-- ================= CAPÍTULO 18 ================= -->
+    <div class="chapter">
+      <h1>Capítulo 18: SSL証明書、60日間評価期間、BTC $30 寄付 & 公式クレジット</h1>
+      <p>HTTPS 検査用 X.509 ルート証明書、60日間の無制限評価期間、ビットコイン寄付レーダー。</p>
+      
+      <div class="card-metaphor">
+        <div class="card-metaphor-title">🛡️ 外交特権パスポートと栄誉の銘板</div>
+        <p>証明書は「この審査官を信頼してください」とブラウザに伝える外交官パスポートです。</p>
+      </div>
+      
+      
+      <table>
+        <thead>
+          <tr>
+            <th>セクション</th>
+            <th>OpenSec Studio での機能</th>
+            <th>わかりやすい例え (メタファー)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td><b>CA ルート証明書</b></td>
+            <td>HTTPS通信を警告なしで復号検査。</td>
+            <td>探偵の公式な封蝋印。</td>
+          </tr>
+          
+          <tr>
+            <td><b>60日間の評価期間</b></td>
+            <td>再インストールでもリセットされない堅牢な60日間無制限試用。</td>
+            <td>2か月間の王国フリーパス。</td>
+          </tr>
+          
+          <tr>
+            <td><b>ビットコイン 30 ドル寄付</b></td>
+            <td>Mempool レーダーによる自動入金検知と独立系ソフトウェア支援。</td>
+            <td>探偵ギルドへの連帯支援。</td>
+          </tr>
+          
+          <tr>
+            <td><b>制作者クレジット</b></td>
+            <td>el saghet により誇りを持って設計・開発。</td>
+            <td>名匠の銘板が刻まれた証。</td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="mission-box">
+        <div class="mission-header">🕵️‍♂️ 探偵ミッション 18: 公式銘板の確認</div>
+        <p>OpenSec Studio について を開き、開発者: el saghet • バージョン v1.10.10 公式エディションを確認してください。</p>
+      </div>
+    </div>
+    
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>opensec-studio</id>
+    <version>1.10.10</version>
+    <packageSourceUrl>https://github.com/saghet/opensec-studio</packageSourceUrl>
+    <owners>el saghet</owners>
+    <title>OpenSec Studio</title>
+    <authors>el saghet</authors>
+    <projectUrl>https://github.com/saghet/opensec-studio</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/el-saghet/opensec-studio/main/src-tauri/icons/128x128.png</iconUrl>
+    <copyright>2026 el saghet</copyright>
+    <licenseUrl>https://github.com/saghet/opensec-studio/blob/main/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/saghet/opensec-studio</projectSourceUrl>
+    <docsUrl>https://github.com/saghet/opensec-studio/tree/main/manuales</docsUrl>
+    <bugTrackerUrl>https://github.com/saghet/opensec-studio/issues</bugTrackerUrl>
+    <tags>opensec burp-suite dast pentesting security rust tauri mitm-proxy</tags>
+    <summary>Ultra-fast native DevSecOps, DAST workbench and HTTP proxy in Rust by el saghet.</summary>
+    <description>
+OpenSec Studio v1.10.10 is a high-performance offensive security and DAST assessment suite developed in native Rust and Tauri.
+Featuring instantaneous 150ms boot times, low memory footprint (&lt;95MB), Nuclei YAML templates, live MITM proxy, OAST collaborator, and offline CVE databases.
+    </description>
+    <releaseNotes>https://github.com/saghet/opensec-studio/releases/tag/v1.10.10</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

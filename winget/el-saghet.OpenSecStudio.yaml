@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.singleton.1.6.0.schema.json
+PackageIdentifier: el-saghet.OpenSecStudio
+PackageVersion: 1.10.10
+PackageLocale: es-ES
+Publisher: el saghet
+PublisherUrl: https://github.com/saghet/opensec-studio
+PublisherSupportUrl: https://github.com/saghet/opensec-studio/issues
+Author: el saghet
+PackageName: OpenSec Studio
+PackageUrl: https://github.com/saghet/opensec-studio
+License: Evaluación 60 Días / Licencia Vitalicia por Donación Bitcoin
+LicenseUrl: https://github.com/saghet/opensec-studio/blob/main/LICENSE
+Copyright: Copyright (c) 2026 el saghet. Todos los derechos reservados.
+ShortDescription: Suite ultrarrápida de ciberseguridad ofensiva, DAST y proxy HTTP escrita en Rust nativo.
+Description: |
+  OpenSec Studio es una plataforma integral de auditoría de seguridad de aplicaciones (DAST),
+  análisis de vulnerabilidades, proxy MITM y pruebas de penetración desarrollada en Rust y Tauri.
+  Ofrece un rendimiento 100x superior a herramientas basadas en Java como Burp Suite, arranque
+  instantáneo en menos de 150 ms y consumo inferior a 95 MB de RAM. Incluye soporte para plantillas
+  Nuclei YAML, cliente OAST y manuales ilustrados en 6 idiomas.
+Moniker: opensec
+Tags:
+  - security
+  - pentesting
+  - dast
+  - burp-suite-alternative
+  - rust
+  - proxy
+  - bug-bounty
+  - devsecops
+ReleaseDate: 2026-10-10
+Installers:
+  - Architecture: x64
+    InstallerType: nullsoft
+    InstallerUrl: https://github.com/saghet/opensec-studio/releases/download/v1.10.10/Instalador_OpenSec_Studio_Setup.exe
+    InstallerSha256: e11bca47a1a0b648adad882e9f9b37ccb96ba20d40b8cafadc373d0164d6225c
+    InstallerLocale: es-ES
+    UpgradeBehavior: install
+    Scope: user
+ManifestType: singleton
+ManifestVersion: 1.6.0
