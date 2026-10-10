@@ -35,10 +35,8 @@ Complete 18-chapter illustrated guides utilizing the intuitive pedagogical model
 
 | File | Type | SHA-256 Hash |
 | :--- | :--- | :--- |
-| `Instalador_OpenSec_Studio_Setup.exe` | Interactive NSIS Installer | `e11bca47a1a0b648adad882e9f9b37ccb96ba20d40b8cafadc373d0164d6225c` |
-| `Instalador_Empresarial_OpenSec_Studio.msi` | Enterprise Windows Installer (MSI) | `f226af2852bcf71b6256c3a720a4ae5e52e2171b6b8a10433b05f83eb1c72f0b` |
-| `OpenSec-Studio-Portable.exe` | Portable Standalone Executable | `abf2b20412765c9e70c39d820df049dfae032a6f081f89371320f6db558530a3` |
-| `OpenSec-Studio-v1.10.10-Windows-x64.zip` | Complete All-in-One Distribution Archive | `50e493990d255d74e914373eff11dd91646106fe7ebe747804007f75ff1dbe7d` |
+| `Instalador_OpenSec_Studio_Setup.exe` | Interactive NSIS Installer | `be90f168c12aee724818e6317087d889d7d1aaaec24741edc7beebd1836a51be` |
+| `Instalador_Empresarial_OpenSec_Studio.msi` | Enterprise Windows Installer (MSI) | `733b6b5a5ab48fd08e337cbbdb2fb5b2620e731b1c6be4ce72589b380653a361` |
 
 ---
 

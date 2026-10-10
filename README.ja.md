@@ -63,7 +63,6 @@ scoop install opensec-studio
 | :--- | :---: | :---: | :--- | :---: |
 | **OpenSec Studio セットアップ** | `.exe` | 1.78 MB | デスクトップ＆スタートメニューへの自動ショートカット作成 | [⬇️ .exe をダウンロード](https://github.com/saghet/opensec-studio/releases/download/v1.10.10/Instalador_OpenSec_Studio_Setup.exe) |
 | **企業向けインストーラー (MSI)** | `.msi` | 2.49 MB | 企業LAN、情シス管理者、Active Directory GPO一括配布 | [⬇️ .msi をダウンロード](https://github.com/saghet/opensec-studio/releases/download/v1.10.10/Instalador_Empresarial_OpenSec_Studio.msi) |
-| **ポータブル版 (Portable ZIP)** | `.zip` | 16.69 MB | USBメモリ運用、スタンドアロン隔離診断環境 | [⬇️ .zip をダウンロード](https://github.com/saghet/opensec-studio/releases/download/v1.10.10/OpenSec-Studio-v1.10.10-Windows-x64.zip) |
 
 ---
 
@@ -72,10 +71,8 @@ scoop install opensec-studio
 ダウンロードしたバイナリのハッシュ値を照合して整合性を検証してください：
 
 ```text
-e11bca47a1a0b648adad882e9f9b37ccb96ba20d40b8cafadc373d0164d6225c  Instalador_OpenSec_Studio_Setup.exe
-f226af2852bcf71b6256c3a720a4ae5e52e2171b6b8a10433b05f83eb1c72f0b  Instalador_Empresarial_OpenSec_Studio.msi
-abf2b20412765c9e70c39d820df049dfae032a6f081f89371320f6db558530a3  OpenSec Studio.exe (ポータブル単体実行ファイル)
-50e493990d255d74e914373eff11dd91646106fe7ebe747804007f75ff1dbe7d  OpenSec-Studio-v1.10.10-Windows-x64.zip
+be90f168c12aee724818e6317087d889d7d1aaaec24741edc7beebd1836a51be  Instalador_OpenSec_Studio_Setup.exe
+733b6b5a5ab48fd08e337cbbdb2fb5b2620e731b1c6be4ce72589b380653a361  Instalador_Empresarial_OpenSec_Studio.msi
 ```
 
 PowerShellでの検証コマンド：
