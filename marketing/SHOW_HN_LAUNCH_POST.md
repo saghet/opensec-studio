@@ -45,7 +45,7 @@ I built **OpenSec Studio** from scratch to rethink what a modern security workbe
 4. **License & Philosophy:**
    Every user gets **60 days of completely unrestricted full evaluation**. Reinstallation does not reset the clock (node-locked hardware vault). Afterwards, continuing use or supporting independent development is accessible via a voluntary $30 USD Bitcoin contribution.
 
-The Windows 64-bit release (installer, MSI, and standalone portable executable) is available on GitHub Releases:
+The Windows 64-bit release (1-click installer and enterprise MSI) is available on GitHub Releases:
 https://github.com/saghet/opensec-studio/releases/tag/v1.10.10
 
 Or install in one line via Winget:

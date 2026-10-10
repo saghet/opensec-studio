@@ -36,7 +36,7 @@ We engineered OpenSec Studio around native Rust (Tauri + Tokio) to solve the res
 
 ### Installation & Download:
 - **Winget:** `winget install el-saghet.OpenSecStudio`
-- **GitHub Release (Portable, NSIS, MSI):** https://github.com/saghet/opensec-studio/releases/tag/v1.10.10
+- **GitHub Release (NSIS Setup & Enterprise MSI):** https://github.com/saghet/opensec-studio/releases/tag/v1.10.10
 - **Landing Page:** https://saghet.github.io/opensec-studio
 
 All packages include complete SHA-256 integrity checksums. Feedback, bug reports, and template contributions are welcome!
