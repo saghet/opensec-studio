@@ -33,7 +33,7 @@ Installers:
   - Architecture: x64
     InstallerType: nullsoft
     InstallerUrl: https://github.com/saghet/opensec-studio/releases/download/v1.10.10/Instalador_OpenSec_Studio_Setup.exe
-    InstallerSha256: be90f168c12aee724818e6317087d889d7d1aaaec24741edc7beebd1836a51be
+    InstallerSha256: 266A5B490484520FD812A5832D90ED8CE80EDC06A90BB4BAB2BD9903F0B2B31C
     InstallerLocale: es-ES
     UpgradeBehavior: install
     Scope: user
