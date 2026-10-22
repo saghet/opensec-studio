@@ -109,6 +109,7 @@ Get-FileHash -Algorithm SHA256 .\Instalador_OpenSec_Studio_Setup.exe
 - **CSPM & CIS Benchmarks:** Deep posture management detecting S3 public buckets, unencrypted RDS databases, open security groups (0.0.0.0/0), and missing MFA.
 - **CIEM & IAM Privilege Escalation:** Identity governance detecting permissions gaps and critical escalation routes (`sts:AssumeRole`, `iam:PassRole`, `iam:AttachUserPolicy`).
 - **Remediation Playbooks & Terraform HCL:** 1-click remediation guidelines and infrastructure-as-code snippets to patch misconfigurations instantly.
+- **Executive Reporting & Compliance Exports:** 1-click generation of high-fidelity HTML / Vector PDF executive scorecards with SVG Attack Path topology, tabular CSV asset & toxic findings inventories, and OASIS SARIF v2.1.0 standard exports for GitHub Security & CI/CD pipelines.
 - **Enterprise SIEM Integration:** Native dispatch to Microsoft Sentinel (`OpenSec_CloudGraph_CL`), Splunk HEC (`opensec:cloudgraph:finding`), Elastic ECS v8, and Syslog RFC 5424 / CEF, complete with pre-built KQL & SPL correlation queries.
 
 ---
