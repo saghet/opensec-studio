@@ -71,8 +71,8 @@ scoop install opensec-studio
 Verify your downloaded binaries against our official cryptographic checksums:
 
 ```text
-cb9aa214044bd4a9054e5ba0e3a35dda6b8f8c2d50fa9963219d2add3d618817  Instalador_OpenSec_Studio_Setup.exe
-9cd08457288d91c1c561a5390a9406cee81e1a812c87511c9b29f4792a71114c  Instalador_Empresarial_OpenSec_Studio.msi
+7fcb397384498b30c201e249174a93a7664e227fa4862d0d03d2c1f5dab83a54  Instalador_OpenSec_Studio_Setup.exe
+315ace5b136fc22951943f85189bdb7f94b6f4ea65be9cd6ace947793d2c5c1f  Instalador_Empresarial_OpenSec_Studio.msi
 ```
 
 To verify in PowerShell:
@@ -104,6 +104,8 @@ Get-FileHash -Algorithm SHA256 .\Instalador_OpenSec_Studio_Setup.exe
 
 ### 4. ☁️ OpenSec CloudGraph (Wiz-like CNAPP, CSPM, CIEM & SIEM Hub)
 - **Cloud Security Graph & Toxic Combinations:** Multi-cloud topology (AWS, Azure, GCP, K8s) correlating internet exposure, unpatched CVEs, excessive IAM permissions, and sensitive databases/buckets to reveal critical attack paths.
+- **Live Multi-Cloud Onboarding (AWS, Azure, GCP):** Built-in connection assistant to validate read-only credentials, test IAM permissions, and ingest live assets in real time.
+- **Shift-Left IaC Audit (Terraform & Kubernetes):** Pre-deployment parser evaluating `terraform show -json` and Kubernetes manifests to stop toxic combinations and CIS misconfigurations before they reach production.
 - **CSPM & CIS Benchmarks:** Deep posture management detecting S3 public buckets, unencrypted RDS databases, open security groups (0.0.0.0/0), and missing MFA.
 - **CIEM & IAM Privilege Escalation:** Identity governance detecting permissions gaps and critical escalation routes (`sts:AssumeRole`, `iam:PassRole`, `iam:AttachUserPolicy`).
 - **Remediation Playbooks & Terraform HCL:** 1-click remediation guidelines and infrastructure-as-code snippets to patch misconfigurations instantly.
