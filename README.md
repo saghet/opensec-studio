@@ -71,8 +71,8 @@ scoop install opensec-studio
 Verify your downloaded binaries against our official cryptographic checksums:
 
 ```text
-be90f168c12aee724818e6317087d889d7d1aaaec24741edc7beebd1836a51be  Instalador_OpenSec_Studio_Setup.exe
-733b6b5a5ab48fd08e337cbbdb2fb5b2620e731b1c6be4ce72589b380653a361  Instalador_Empresarial_OpenSec_Studio.msi
+cb9aa214044bd4a9054e5ba0e3a35dda6b8f8c2d50fa9963219d2add3d618817  Instalador_OpenSec_Studio_Setup.exe
+9cd08457288d91c1c561a5390a9406cee81e1a812c87511c9b29f4792a71114c  Instalador_Empresarial_OpenSec_Studio.msi
 ```
 
 To verify in PowerShell:
@@ -101,6 +101,13 @@ Get-FileHash -Algorithm SHA256 .\Instalador_OpenSec_Studio_Setup.exe
 ### 3. 🛡️ Native Rust Core & Anti-Cracking Defense Sentinel
 - **Stripped Native Binary:** Compiled with Rust LTO (Link Time Optimization), stripping symbols and eliminating JVM overhead.
 - **Active Anti-Cracking Protection:** Multi-layer defense sentinel protecting against reverse engineering, DLL hijacking (`LOAD_LIBRARY_SEARCH_SYSTEM32`), API hooking, and debugger attachment.
+
+### 4. ☁️ OpenSec CloudGraph (Wiz-like CNAPP, CSPM, CIEM & SIEM Hub)
+- **Cloud Security Graph & Toxic Combinations:** Multi-cloud topology (AWS, Azure, GCP, K8s) correlating internet exposure, unpatched CVEs, excessive IAM permissions, and sensitive databases/buckets to reveal critical attack paths.
+- **CSPM & CIS Benchmarks:** Deep posture management detecting S3 public buckets, unencrypted RDS databases, open security groups (0.0.0.0/0), and missing MFA.
+- **CIEM & IAM Privilege Escalation:** Identity governance detecting permissions gaps and critical escalation routes (`sts:AssumeRole`, `iam:PassRole`, `iam:AttachUserPolicy`).
+- **Remediation Playbooks & Terraform HCL:** 1-click remediation guidelines and infrastructure-as-code snippets to patch misconfigurations instantly.
+- **Enterprise SIEM Integration:** Native dispatch to Microsoft Sentinel (`OpenSec_CloudGraph_CL`), Splunk HEC (`opensec:cloudgraph:finding`), Elastic ECS v8, and Syslog RFC 5424 / CEF, complete with pre-built KQL & SPL correlation queries.
 
 ---
 
