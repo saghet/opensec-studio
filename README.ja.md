@@ -36,7 +36,7 @@
 | **YAML脆弱性テンプレート実行** | 外部拡張機能が必要 | **Nuclei互換エンジン標準搭載** | 📜 コミュニティのYAMLルールをそのまま実行可能 |
 | **JWTデバッガー & デコーダー** | BAppストアのプラグイン依存 | **ネイティブ標準搭載 (Decoder)** | 🔍 `alg: none` 攻撃等の脆弱性を自動警告 |
 | **SARIF v2.1.0 レポート出力** | 制限あり | **ワンクリックでネイティブ出力** | 📈 GitHub Security や CI/CD パイプラインと直結 |
-| **イラスト入り日本語マニュアル** | 英語のみ | **完全日本語対応 (全18章)** | 🌍 高解像度ベクターPDF＆HTMLマニュアル付属 |
+| **イラスト入り日本語マニュアル** | 英語のみ | **完全日本語対応 (全19章)** | 🌍 高解像度ベクターPDF＆HTMLマニュアル付属 |
 | **Windows 1コマンド導入** | 重いインストーラーの手動DL | `winget install el-saghet.OpenSecStudio` | 📦 WinGet & Scoop による自動インストール |
 | **評価利用期間** | 30日間 (コミュニティ版機能制限) | **60日間 無制限フル機能アクセス** | 💎 全機能が初日から即座に利用可能 |
 
@@ -71,8 +71,8 @@ scoop install opensec-studio
 ダウンロードしたバイナリのハッシュ値を照合して整合性を検証してください：
 
 ```text
-be90f168c12aee724818e6317087d889d7d1aaaec24741edc7beebd1836a51be  Instalador_OpenSec_Studio_Setup.exe
-733b6b5a5ab48fd08e337cbbdb2fb5b2620e731b1c6be4ce72589b380653a361  Instalador_Empresarial_OpenSec_Studio.msi
+560d7cf585cb8da3d16c9f49583b0388b2532e2abd2e702d92763cade1542efa  Instalador_OpenSec_Studio_Setup.exe
+6a93ba46258bf547a88f8188ab52f96f0579d702b3bb2fd038747a15d7ef7fa5  Instalador_Empresarial_OpenSec_Studio.msi
 ```
 
 PowerShellでの検証コマンド：
@@ -84,7 +84,7 @@ Get-FileHash -Algorithm SHA256 .\Instalador_OpenSec_Studio_Setup.exe
 
 ## 📖 6言語対応 イラスト入り公式ユーザーマニュアル
 
-「インターネットの大村」という直感的な教育モデルを採用した全18章の完全ガイド：
+「インターネットの大村」という直感的な教育モデルを採用した全19章の完全ガイド：
 
 - 🇯🇵 **[日本語マニュアル (高解像度PDF)](manuales/Manual_OpenSec_Studio_JA_El_Saghet.pdf)** | [HTMLで閲覧](manuales/manual_ja.html)
 - 🇺🇸 **[User Manual in English (PDF)](manuales/Manual_OpenSec_Studio_EN_El_Saghet.pdf)** | [HTML](manuales/manual_en.html)

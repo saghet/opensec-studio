@@ -8,9 +8,8 @@
   },
   "architecture": {
     "64bit": {
-      "url": "https://github.com/saghet/opensec-studio/releases/download/v1.10.10/OpenSec-Studio-v1.10.10-Windows-x64.zip",
-      "hash": "50e493990d255d74e914373eff11dd91646106fe7ebe747804007f75ff1dbe7d",
-      "extract_dir": "OpenSec-Studio-v1.10.10-Windows-x64\\Version_Portable"
+      "url": "https://github.com/saghet/opensec-studio/releases/download/v1.10.10/Instalador_OpenSec_Studio_Setup.exe",
+      "hash": "560d7cf585cb8da3d16c9f49583b0388b2532e2abd2e702d92763cade1542efa"
     }
   },
   "bin": [
@@ -26,7 +25,7 @@
   "autoupdate": {
     "architecture": {
       "64bit": {
-        "url": "https://github.com/saghet/opensec-studio/releases/download/v$version/OpenSec-Studio-v$version-Windows-x64.zip"
+        "url": "https://github.com/saghet/opensec-studio/releases/download/v$version/Instalador_OpenSec_Studio_Setup.exe"
       }
     }
   }

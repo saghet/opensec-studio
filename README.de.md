@@ -36,7 +36,7 @@ Warum Sicherheitsexperten von Burp Suite zu OpenSec Studio wechseln:
 | **YAML-Sicherheitsregeln** | Drittanbieter-Plugins erforderlich | **Nativer Nuclei-kompatibler Parser** | 📜 Unterstützt Community-YAML-Vorlagen |
 | **JWT-Debugger & Inspektor** | Nur über BApp-Store | **Nativ integriert (Decoder)** | 🔍 Automatische Warnung bei `alg: none` |
 | **SARIF v2.1.0-Export** | Eingeschränkt | **Nativer 1-Klick-Export** | 📈 Nahtlose CI/CD- & GitHub Security-Integration |
-| **Illustrierte Handbücher auf Deutsch** | Nur auf Englisch | **Vollständig auf Deutsch (PDF & HTML)** | 🌍 18 Kapitel inklusive anschaulicher Diagramme |
+| **Illustrierte Handbücher auf Deutsch** | Nur auf Englisch | **Vollständig auf Deutsch (PDF & HTML)** | 🌍 19 Kapitel inklusive anschaulicher Diagramme |
 | **1-Klick-Installation unter Windows** | Manuelle Installation | `winget install el-saghet.OpenSecStudio` | 📦 Automatisierte WinGet- & Scoop-Unterstützung |
 | **Evaluierungszeitraum** | 30 Tage (Community eingeschränkt) | **60 Tage uneingeschränkter Vollzugriff** | 💎 Alle Funktionen sofort einsatzbereit |
 
@@ -71,8 +71,8 @@ scoop install opensec-studio
 Überprüfen Sie Ihre Downloads anhand der offiziellen Prüfsummen:
 
 ```text
-be90f168c12aee724818e6317087d889d7d1aaaec24741edc7beebd1836a51be  Instalador_OpenSec_Studio_Setup.exe
-733b6b5a5ab48fd08e337cbbdb2fb5b2620e731b1c6be4ce72589b380653a361  Instalador_Empresarial_OpenSec_Studio.msi
+560d7cf585cb8da3d16c9f49583b0388b2532e2abd2e702d92763cade1542efa  Instalador_OpenSec_Studio_Setup.exe
+6a93ba46258bf547a88f8188ab52f96f0579d702b3bb2fd038747a15d7ef7fa5  Instalador_Empresarial_OpenSec_Studio.msi
 ```
 
 ---

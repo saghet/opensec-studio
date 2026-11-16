@@ -36,7 +36,7 @@ Por qué los profesionales de ciberseguridad y hackers éticos están migrando d
 | **Reglas de Vulnerabilidad YAML** | Requiere extensiones pesadas | **Motor Nativo compatible con Nuclei** | 📜 Ejecución directa de plantillas YAML comunitarias |
 | **Inspector y Decodificador JWT** | Plugins de terceros | **Integrado de serie (Decoder)** | 🔍 Alertas de algoritmo inseguro `alg: none` |
 | **Exportación SARIF v2.1.0** | Compleja / Limitada | **Exportación Nativa en 1 Clic** | 📈 Integración directa con GitHub Security y CI/CD |
-| **Manuales Ilustrados en Español** | Solo inglés técnico | **Completo en Español (18 capítulos)** | 🌍 Manual ilustrado en PDF vectorial de alta definición |
+| **Manuales Ilustrados en Español** | Solo inglés técnico | **Completo en Español (19 capítulos)** | 🌍 Manual ilustrado en PDF vectorial de alta definición |
 | **Instalación en Windows en 1 Clic** | Instalador manual pesado | `winget install el-saghet.OpenSecStudio` | 📦 Instalación automatizada con WinGet o Scoop |
 | **Periodo de Prueba** | 30 días con funciones capadas | **60 Días Completos sin Restricciones** | 💎 Todas las herramientas desbloqueadas de inicio |
 
@@ -71,8 +71,8 @@ scoop install opensec-studio
 Verifica tus instaladores descargados con los hashes SHA-256 oficiales:
 
 ```text
-be90f168c12aee724818e6317087d889d7d1aaaec24741edc7beebd1836a51be  Instalador_OpenSec_Studio_Setup.exe
-733b6b5a5ab48fd08e337cbbdb2fb5b2620e731b1c6be4ce72589b380653a361  Instalador_Empresarial_OpenSec_Studio.msi
+560d7cf585cb8da3d16c9f49583b0388b2532e2abd2e702d92763cade1542efa  Instalador_OpenSec_Studio_Setup.exe
+6a93ba46258bf547a88f8188ab52f96f0579d702b3bb2fd038747a15d7ef7fa5  Instalador_Empresarial_OpenSec_Studio.msi
 ```
 
 Para verificar en PowerShell:
@@ -106,7 +106,7 @@ Get-FileHash -Algorithm SHA256 .\Instalador_OpenSec_Studio_Setup.exe
 
 ## 📖 Manuales de Usuario Ilustrados en 6 Idiomas
 
-Accede a la documentación completa de 18 capítulos basada en la metáfora pedagógica *"La Gran Aldea de Internet"*:
+Accede a la documentación completa de 19 capítulos basada en la metáfora pedagógica *"La Gran Aldea de Internet"*:
 
 - 🇪🇸 **[Manual en Español (PDF Vectorial)](manuales/Manual_OpenSec_Studio_ES_El_Saghet.pdf)** | [Ver Online HTML](manuales/manual_es.html)
 - 🇺🇸 **[User Manual in English (PDF)](manuales/Manual_OpenSec_Studio_EN_El_Saghet.pdf)** | [HTML](manuales/manual_en.html)

@@ -71,8 +71,8 @@ scoop install opensec-studio
 Verify your downloaded binaries against our official cryptographic checksums:
 
 ```text
-7fcb397384498b30c201e249174a93a7664e227fa4862d0d03d2c1f5dab83a54  Instalador_OpenSec_Studio_Setup.exe
-315ace5b136fc22951943f85189bdb7f94b6f4ea65be9cd6ace947793d2c5c1f  Instalador_Empresarial_OpenSec_Studio.msi
+560d7cf585cb8da3d16c9f49583b0388b2532e2abd2e702d92763cade1542efa  Instalador_OpenSec_Studio_Setup.exe
+6a93ba46258bf547a88f8188ab52f96f0579d702b3bb2fd038747a15d7ef7fa5  Instalador_Empresarial_OpenSec_Studio.msi
 ```
 
 To verify in PowerShell:
@@ -118,7 +118,7 @@ Get-FileHash -Algorithm SHA256 .\Instalador_OpenSec_Studio_Setup.exe
 
 ## 📖 Illustrated User Manuals (6 Languages)
 
-Complete 18-chapter illustrated user manuals using the intuitive pedagogical framework *"The Great Internet Village"*, compiled into high-definition vector PDFs and interactive HTML:
+Complete 19-chapter illustrated user manuals using the intuitive pedagogical framework *"The Great Internet Village"*, compiled into high-definition vector PDFs and interactive HTML:
 
 | Language | Illustrated PDF Manual | Interactive HTML |
 | :--- | :---: | :---: |

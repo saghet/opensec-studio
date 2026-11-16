@@ -36,7 +36,7 @@ Pourquoi les professionnels de la sécurité informatique choisissent OpenSec St
 | **Règles YAML de Vulnérabilités** | Plugins tiers requis | **Moteur Natif compatible Nuclei** | 📜 Prise en charge directe des templates communautaires |
 | **Inspecteur & Décodeur JWT** | Extensions tierces | **Natif et intégré (Decoder)** | 🔍 Détection automatique des failles `alg: none` |
 | **Exportation SARIF v2.1.0** | Limitée | **Export Natif en 1 Clic** | 📈 Intégration immédiate avec GitHub Security & CI/CD |
-| **Manuels Illustrés en Français** | Uniquement en anglais technique | **Complet en Français (18 chapitres)** | 🌍 Format vectoriel PDF et HTML haute définition |
+| **Manuels Illustrés en Français** | Uniquement en anglais technique | **Complet en Français (19 chapitres)** | 🌍 Format vectoriel PDF et HTML haute définition |
 | **Installation en 1 Ligne sous Windows** | Installateur manuel lourd | `winget install el-saghet.OpenSecStudio` | 📦 Prise en charge native de WinGet et Scoop |
 | **Période d'Évaluation** | 30 jours avec modules restreints | **60 Jours d'Accès Total Illimité** | 💎 Tous les modules opérationnels dès le premier jour |
 
@@ -71,8 +71,8 @@ scoop install opensec-studio
 Vérifiez l'intégrité de vos téléchargements avec les hachages officiels :
 
 ```text
-be90f168c12aee724818e6317087d889d7d1aaaec24741edc7beebd1836a51be  Instalador_OpenSec_Studio_Setup.exe
-733b6b5a5ab48fd08e337cbbdb2fb5b2620e731b1c6be4ce72589b380653a361  Instalador_Empresarial_OpenSec_Studio.msi
+560d7cf585cb8da3d16c9f49583b0388b2532e2abd2e702d92763cade1542efa  Instalador_OpenSec_Studio_Setup.exe
+6a93ba46258bf547a88f8188ab52f96f0579d702b3bb2fd038747a15d7ef7fa5  Instalador_Empresarial_OpenSec_Studio.msi
 ```
 
 ---
