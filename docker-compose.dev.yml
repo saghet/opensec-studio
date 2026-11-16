@@ -1,16 +1,16 @@
-# Development overrides: exposes API & DB locally on 127.0.0.1 for debugging
+# Development overrides: exposes API & DB locally on 127.0.0.1 (non-conflicting ports)
 services:
   opensec-postgres:
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:${POSTGRES_DEV_PORT:-15432}:5432"
 
   opensec-redis:
     ports:
-      - "127.0.0.1:6379:6379"
+      - "127.0.0.1:${REDIS_DEV_PORT:-16379}:6379"
 
   opensec-api:
     ports:
-      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:${OPENSEC_API_DEV_PORT:-18080}:8080"
     environment:
       OPENSEC_ENV: development
       LOG_LEVEL: debug
