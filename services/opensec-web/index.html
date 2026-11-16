@@ -152,6 +152,19 @@
         </div>
         <table><thead><tr><th>Hostname</th><th>Despliegue</th><th>Estado</th><th>Endpoint Kismet</th><th>Último Heartbeat</th></tr></thead><tbody id="tb-sensors"></tbody></table>
       </div>
+      <div class="card">
+        <h2>Matriz de Compatibilidad Wi-Fi (Linux nl80211)</h2>
+        <table>
+          <thead><tr><th>Chipset / Familia</th><th>Driver Linux</th><th>Bandas</th><th>Monitor Mode</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Atheros AR9271 (USB)</td><td><code>ath9k_htc</code></td><td>2.4 GHz</td><td><span class="badge">Completo</span></td><td>Estable en kernel Linux; sin 5/6 GHz.</td></tr>
+            <tr><td>MediaTek MT7612U (USB)</td><td><code>mt76x2u</code></td><td>2.4 / 5 GHz</td><td><span class="badge">Completo</span></td><td>Driver in-tree recomendado para sensores.</td></tr>
+            <tr><td>MediaTek MT7921U (USB)</td><td><code>mt7921u</code></td><td>2.4 / 5 / 6 GHz</td><td><span class="badge">Soportado</span></td><td>6 GHz sujeto a dominio regulatorio.</td></tr>
+            <tr><td>Intel AX200/AX210</td><td><code>iwlwifi</code></td><td>2.4 / 5 / 6 GHz</td><td><span class="badge warn">Limitado</span></td><td>Firmware de cliente; no recomendado como sensor.</td></tr>
+            <tr><td>Broadcom onboard</td><td><code>brcmfmac</code></td><td>2.4 / 5 GHz</td><td><span class="badge crit">No nativo</span></td><td>Requiere firmware modificado; sin soporte estándar.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <!-- 4. WIRELESS MONITOR -->
@@ -210,6 +223,7 @@
       <div class="card">
         <h2>Exportar Informes de Seguridad</h2>
         <div class="form-row">
+          <a class="btn" href="/api/v1/reports/export?format=html" target="_blank">Ver Informe HTML</a>
           <a class="btn" href="/api/v1/reports/export?format=json" target="_blank">Exportar JSON</a>
           <a class="btn" href="/api/v1/reports/export?format=csv" download="opensec_report.csv">Exportar CSV</a>
           <a class="btn" href="/api/v1/reports/export?format=sarif" download="opensec_report.sarif.json">Exportar SARIF v2.1.0</a>

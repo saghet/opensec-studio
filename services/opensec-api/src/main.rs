@@ -786,7 +786,21 @@ fn main() {
                     &[&org_id],
                 ).unwrap_or_default();
 
-                if fmt == "csv" {
+                if fmt == "html" {
+                    let mut rows_html = String::new();
+                    for r in rows {
+                        rows_html.push_str(&format!(
+                            "<tr><td>{}</td><td><code>{}</code></td><td><code>{}</code></td><td>{}</td><td><strong>{}</strong></td><td>{}</td><td>{}</td></tr>",
+                            r.get::<_, String>(1), r.get::<_, String>(0), r.get::<_, String>(2),
+                            r.get::<_, String>(3), r.get::<_, String>(4), r.get::<_, String>(5), r.get::<_, String>(7)
+                        ));
+                    }
+                    let html = format!(
+                        "<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"><title>OpenSec Studio - Informe de Seguridad Wi-Fi</title><style>body{{font-family:system-ui,sans-serif;margin:32px;color:#0f172a}}table{{width:100%;border-collapse:collapse;margin-top:16px}}th,td{{border:1px solid #cbd5e1;padding:8px;text-align:left;font-size:13px}}th{{background:#f1f5f9}}</style></head><body><h1>OpenSec Studio — Informe de Evaluación Inalámbrica</h1><p>Modo: {} | Fuente: PostgreSQL</p><table><thead><tr><th>SSID</th><th>BSSID</th><th>Regla</th><th>Naturaleza</th><th>Severidad</th><th>Hallazgo</th><th>Remediación</th></tr></thead><tbody>{}</tbody></table></body></html>",
+                        mode, rows_html
+                    );
+                    text_response(200, "text/html; charset=utf-8", html)
+                } else if fmt == "csv" {
                     let mut csv = String::from("bssid,ssid,rule_id,nature,severity,title,remediation\n");
                     for r in rows {
                         let line = format!(
