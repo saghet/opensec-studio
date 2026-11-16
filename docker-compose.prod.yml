@@ -1,0 +1,80 @@
+# Production hardening overrides: resource limits, read-only rootfs, cap_drop ALL
+services:
+  opensec-postgres:
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1024M
+        reservations:
+          memory: 256M
+
+  opensec-redis:
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+
+  opensec-pcap-analyzer:
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=128M
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1024M
+
+  opensec-api:
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=64M
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+  opensec-worker:
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=64M
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+  opensec-web:
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=32M
+      - /var/cache/nginx:size=32M
+      - /var/run:size=8M
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenSec Studio — Wireless Security Center</title>
+  <style>
+    :root { --bg: #0b1120; --card: #111827; --border: #1f2937; --text: #e2e8f0; --muted: #94a3b8; --accent: #22d3ee; --danger: #ef4444; --ok: #10b981; }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 24px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; background: #064e3b; color: #6ee7b7; }
+    .badge.killed { background: #7f1d1d; color: #fecaca; }
+    .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 20px; }
+    input, select, button { background: #0f172a; color: var(--text); border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; font-size: 13px; }
+    button { cursor: pointer; background: #0e7490; border-color: #0891b2; font-weight: 600; }
+    button.kill { background: #991b1b; border-color: #dc2626; }
+    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+    .kpi .label { font-size: 12px; color: var(--muted); }
+    .kpi .val { font-size: 26px; font-weight: 700; margin-top: 4px; color: var(--accent); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+    .panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+    .panel h2 { font-size: 15px; margin: 0 0 10px 0; }
+    .empty { font-size: 13px; color: var(--muted); font-style: italic; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <span id="mode-badge" class="badge">Modo Pasivo / Defensivo</span>
+        <h1 style="margin:6px 0 0 0; font-size:22px;">OpenSec Studio — Wireless Security Center</h1>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button onclick="loadDashboard()">Actualizar</button>
+        <button id="kill-btn" class="kill" onclick="toggleKillSwitch()">Kill Switch</button>
+      </div>
+    </header>
+
+    <section class="filters" aria-label="Filtros de monitoreo">
+      <input type="date" id="f-from" title="Fecha inicio" />
+      <input type="date" id="f-to" title="Fecha fin" />
+      <input type="text" id="f-org" placeholder="Organización" />
+      <input type="text" id="f-sensor" placeholder="Sensor ID" />
+      <input type="text" id="f-network" placeholder="Red / SSID / BSSID" />
+      <select id="f-severity">
+        <option value="">Severidad (todas)</option>
+        <option value="critical">Critical</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+      <input type="number" id="f-conf" min="0" max="1" step="0.1" placeholder="Confianza mín (0-1)" />
+      <button onclick="loadDashboard()">Aplicar Filtros</button>
+    </section>
+
+    <section class="kpis">
+      <div class="kpi"><div class="label">Sensores Online</div><div class="val" id="k-sensors">-</div></div>
+      <div class="kpi"><div class="label">Redes / AP Inventariados</div><div class="val" id="k-networks">-</div></div>
+      <div class="kpi"><div class="label">Clientes Observados</div><div class="val" id="k-clients">-</div></div>
+      <div class="kpi"><div class="label">Redes Desconocidas</div><div class="val" id="k-unknown">-</div></div>
+      <div class="kpi"><div class="label">Alertas Rogue AP / WIDS</div><div class="val" id="k-alerts">-</div></div>
+      <div class="kpi"><div class="label">Capturas PCAP Analizadas</div><div class="val" id="k-pcaps">-</div></div>
+    </section>
+
+    <section class="grid">
+      <div class="panel"><h2>Estado de Sensores y Hardware Wi-Fi</h2><div id="p-sensors" class="empty">Cargando...</div></div>
+      <div class="panel"><h2>Inventario de AP y Seguridad por Protocolo</h2><div id="p-networks" class="empty">Cargando...</div></div>
+      <div class="panel"><h2>Alertas WIDS, Rogue AP y Anomalías</h2><div id="p-alerts" class="empty">Cargando...</div></div>
+      <div class="panel"><h2>Risk Scoring, Canales, Bandas e Informes</h2><div id="p-risks" class="empty">Cargando...</div></div>
+    </section>
+  </div>
+
+  <script>
+    let killSwitchActive = false;
+
+    function buildQuery() {
+      const p = new URLSearchParams();
+      const map = {
+        date_from: document.getElementById('f-from').value,
+        date_to: document.getElementById('f-to').value,
+        org: document.getElementById('f-org').value,
+        sensor: document.getElementById('f-sensor').value,
+        network: document.getElementById('f-network').value,
+        severity: document.getElementById('f-severity').value,
+        min_confidence: document.getElementById('f-conf').value
+      };
+      Object.entries(map).forEach(([k, v]) => { if (v) p.set(k, v); });
+      const qs = p.toString();
+      return qs ? '?' + qs : '';
+    }
+
+    function renderList(elId, items, emptyMsg) {
+      const el = document.getElementById(elId);
+      if (!items || items.length === 0) {
+        el.className = 'empty';
+        el.textContent = emptyMsg;
+        return;
+      }
+      el.className = '';
+      el.innerHTML = '<ul>' + items.map(i => '<li>' + JSON.stringify(i) + '</li>').join('') + '</ul>';
+    }
+
+    async function loadDashboard() {
+      const qs = buildQuery();
+      try {
+        const [sum, sensors, nets, alerts, risks] = await Promise.all([
+          fetch('/api/v1/dashboard/summary' + qs).then(r => r.json()),
+          fetch('/api/v1/sensors' + qs).then(r => r.json()),
+          fetch('/api/v1/networks' + qs).then(r => r.json()),
+          fetch('/api/v1/alerts' + qs).then(r => r.json()),
+          fetch('/api/v1/risks' + qs).then(r => r.json())
+        ]);
+        killSwitchActive = !!sum.kill_switch_active;
+        const badge = document.getElementById('mode-badge');
+        badge.textContent = killSwitchActive ? 'KILL SWITCH ACTIVO (Captura detenida)' : 'Modo Pasivo / Defensivo (' + sum.mode + ')';
+        badge.className = killSwitchActive ? 'badge killed' : 'badge';
+
+        document.getElementById('k-sensors').textContent = sum.sensors_online;
+        document.getElementById('k-networks').textContent = sum.networks_total;
+        document.getElementById('k-clients').textContent = sum.clients_observed;
+        document.getElementById('k-unknown').textContent = sum.unknown_networks;
+        document.getElementById('k-alerts').textContent = sum.open_alerts;
+        document.getElementById('k-pcaps').textContent = sum.captures_analyzed;
+
+        renderList('p-sensors', sensors.items, 'Sin sensores registrados aún (ejecuta perfil wireless-sensor en Linux).');
+        renderList('p-networks', nets.items, 'Sin redes observadas aún.');
+        renderList('p-alerts', alerts.items, 'Sin alertas WIDS activas.');
+        renderList('p-risks', risks.items, 'Sin evaluaciones de riesgo registradas aún.');
+      } catch (e) {
+        document.getElementById('mode-badge').textContent = 'API no disponible';
+      }
+    }
+
+    async function toggleKillSwitch() {
+      const endpoint = killSwitchActive ? '/api/v1/kill-switch/disable' : '/api/v1/kill-switch/enable';
+      await fetch(endpoint, { method: 'POST' });
+      await loadDashboard();
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+services:
+  opensec-postgres:
+    image: postgres:16.6-alpine3.21
+    container_name: opensec-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-opensec}
+      POSTGRES_USER: ${POSTGRES_USER:-opensec_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
+    volumes:
+      - opensec_pg_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - opensec_internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-opensec_app} -d ${POSTGRES_DB:-opensec}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  opensec-redis:
+    image: redis:7.4.2-alpine3.21
+    container_name: opensec-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:?REDIS_PASSWORD must be set}"]
+    volumes:
+      - opensec_redis_data:/data
+    networks:
+      - opensec_internal
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"${REDIS_PASSWORD}\" ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  opensec-pcap-analyzer:
+    build:
+      context: .
+      dockerfile: docker/pcap-analyzer/Dockerfile
+    container_name: opensec-pcap-analyzer
+    restart: unless-stopped
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      OPENSEC_PCAP_MAX_UPLOAD_MB: ${OPENSEC_PCAP_MAX_UPLOAD_MB:-250}
+    volumes:
+      - opensec_pcap_vault:/var/lib/opensec/pcaps:ro
+    networks:
+      - opensec_internal
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8090/health').read()\""]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  opensec-api:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    container_name: opensec-api
+    restart: unless-stopped
+    depends_on:
+      opensec-postgres:
+        condition: service_healthy
+      opensec-redis:
+        condition: service_healthy
+    environment:
+      OPENSEC_ENV: ${OPENSEC_ENV:-production}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      OPENSEC_API_HOST: 0.0.0.0
+      OPENSEC_API_PORT: 8080
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL must be set}
+      REDIS_URL: ${REDIS_URL:?REDIS_URL must be set}
+      OPENSEC_JWT_SECRET: ${OPENSEC_JWT_SECRET:?OPENSEC_JWT_SECRET must be set}
+      OPENSEC_DEFAULT_MODE: ${OPENSEC_DEFAULT_MODE:-passive_only}
+      PCAP_ANALYZER_URL: http://opensec-pcap-analyzer:8090
+    volumes:
+      - opensec_pcap_vault:/var/lib/opensec/pcaps
+    networks:
+      - opensec_internal
+      - opensec_edge
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  opensec-worker:
+    build:
+      context: .
+      dockerfile: docker/worker/Dockerfile
+    container_name: opensec-worker
+    restart: unless-stopped
+    depends_on:
+      opensec-postgres:
+        condition: service_healthy
+      opensec-redis:
+        condition: service_healthy
+    environment:
+      OPENSEC_ENV: ${OPENSEC_ENV:-production}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL must be set}
+      REDIS_URL: ${REDIS_URL:?REDIS_URL must be set}
+      OPENSEC_PCAP_RETENTION_DAYS: ${OPENSEC_PCAP_RETENTION_DAYS:-7}
+      PCAP_ANALYZER_URL: http://opensec-pcap-analyzer:8090
+    networks:
+      - opensec_internal
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f opensec-worker >/dev/null || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  opensec-web:
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
+    container_name: opensec-web
+    restart: unless-stopped
+    depends_on:
+      opensec-api:
+        condition: service_healthy
+    ports:
+      - "${OPENSEC_WEB_PORT:-8088}:8080"
+    networks:
+      - opensec_edge
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/healthz >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # Linux Hardware Sensor Services (activated via: --profile wireless-sensor)
+  opensec-kismet:
+    build:
+      context: .
+      dockerfile: docker/kismet/Dockerfile
+    container_name: opensec-kismet
+    profiles: ["wireless-sensor"]
+    restart: unless-stopped
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      KISMET_USER: ${KISMET_USER:-opensec_kismet}
+      KISMET_PASSWORD: ${KISMET_PASSWORD:-CHANGE_ME_KISMET_PASSWORD}
+      OPENSEC_WIFI_INTERFACE: ${OPENSEC_WIFI_INTERFACE:-wlan0mon}
+    volumes:
+      - opensec_kismet_logs:/var/log/kismet
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  opensec-wireless-agent:
+    build:
+      context: .
+      dockerfile: docker/wireless-agent/Dockerfile
+    container_name: opensec-wireless-agent
+    profiles: ["wireless-sensor"]
+    restart: unless-stopped
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      OPENSEC_SENSOR_ID: ${OPENSEC_SENSOR_ID:-sensor-linux-01}
+      OPENSEC_WIFI_INTERFACE: ${OPENSEC_WIFI_INTERFACE:-wlan0mon}
+      KISMET_HOST: ${KISMET_HOST:-127.0.0.1}
+      KISMET_PORT: ${KISMET_PORT:-2501}
+      REDIS_URL: ${REDIS_URL:-redis://127.0.0.1:6379/0}
+      OPENSEC_DEFAULT_MODE: passive_only
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+networks:
+  opensec_internal:
+    driver: bridge
+    internal: true
+  opensec_edge:
+    driver: bridge
+
+volumes:
+  opensec_pg_data:
+  opensec_redis_data:
+  opensec_pcap_vault:
+  opensec_kismet_logs:

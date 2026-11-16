@@ -3,3 +3,15 @@
 Thumbs.db
 *.tmp
 *.log
+
+# Rust build artifacts
+/target/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Local secrets, backups & generated reports
+.env
+backups/
+sbom-reports/
