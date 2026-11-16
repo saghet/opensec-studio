@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+  "crates/opensec-core",
   "services/opensec-api",
   "services/opensec-worker"
 ]

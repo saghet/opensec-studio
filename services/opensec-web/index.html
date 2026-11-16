@@ -5,142 +5,369 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OpenSec Studio — Wireless Security Center</title>
   <style>
-    :root { --bg: #0b1120; --card: #111827; --border: #1f2937; --text: #e2e8f0; --muted: #94a3b8; --accent: #22d3ee; --danger: #ef4444; --ok: #10b981; }
+    :root {
+      --bg: #0b1120; --sidebar: #080d1a; --card: #111827; --border: #1e293b;
+      --text: #e2e8f0; --muted: #94a3b8; --accent: #22d3ee; --ok: #10b981;
+      --warn: #f59e0b; --danger: #ef4444; --btn: #0e7490;
+    }
     * { box-sizing: border-box; }
-    body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 24px; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; }
-    .badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; background: #064e3b; color: #6ee7b7; }
+    body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+    aside { width: 250px; background: var(--sidebar); border-right: 1px solid var(--border); padding: 18px 12px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+    .brand { padding: 8px 10px 16px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .brand h1 { font-size: 16px; margin: 0; color: var(--accent); }
+    .brand small { color: var(--muted); font-size: 11px; }
+    .nav-group { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 10px 10px 4px; }
+    .nav-btn { width: 100%; text-align: left; background: transparent; border: 1px solid transparent; color: var(--text); padding: 9px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+    .nav-btn:hover { background: #131c31; }
+    .nav-btn.active { background: #0f2942; border-color: #0891b2; color: #67e8f9; font-weight: 600; }
+    main { flex: 1; padding: 22px 26px; overflow-x: auto; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+    .badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #064e3b; color: #6ee7b7; }
     .badge.killed { background: #7f1d1d; color: #fecaca; }
-    .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 20px; }
-    input, select, button { background: #0f172a; color: var(--text); border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; font-size: 13px; }
-    button { cursor: pointer; background: #0e7490; border-color: #0891b2; font-weight: 600; }
-    button.kill { background: #991b1b; border-color: #dc2626; }
-    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .badge.warn { background: #78350f; color: #fde68a; }
+    .badge.crit { background: #7f1d1d; color: #fecaca; }
+    .badge.info { background: #1e3a8a; color: #bfdbfe; }
+    .btn { background: var(--btn); color: #fff; border: none; border-radius: 7px; padding: 8px 14px; cursor: pointer; font-size: 13px; font-weight: 600; }
+    .btn.secondary { background: #1e293b; border: 1px solid #334155; }
+    .btn.danger { background: #991b1b; }
+    .btn.sm { padding: 4px 9px; font-size: 11px; }
+    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
     .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
     .kpi .label { font-size: 12px; color: var(--muted); }
     .kpi .val { font-size: 26px; font-weight: 700; margin-top: 4px; color: var(--accent); }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
-    .panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
-    .panel h2 { font-size: 15px; margin: 0 0 10px 0; }
-    .empty { font-size: 13px; color: var(--muted); font-style: italic; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+    .card h2 { margin: 0 0 12px 0; font-size: 15px; }
+    .form-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; align-items: center; }
+    input, select { background: #0f172a; color: var(--text); border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; font-size: 13px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; }
+    .view { display: none; }
+    .view.active { display: block; }
+    .muted { color: var(--muted); font-size: 13px; }
+    pre { background: #080d1a; border: 1px solid var(--border); padding: 10px; border-radius: 8px; overflow-x: auto; font-size: 12px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
+  <aside>
+    <div class="brand">
+      <h1>OpenSec Studio</h1>
+      <small>Wireless Security Center</small>
+    </div>
+
+    <div class="nav-group">FortiView</div>
+    <button class="nav-btn active" onclick="showView('dashboard', this)">Dashboard</button>
+
+    <div class="nav-group">Policy &amp; Objects</div>
+    <button class="nav-btn" onclick="showView('policy', this)">Scope &amp; Allowlist</button>
+
+    <div class="nav-group">Wi-Fi &amp; Sensors</div>
+    <button class="nav-btn" onclick="showView('sensors', this)">Sensors &amp; Hardware</button>
+
+    <div class="nav-group">Wireless Monitor</div>
+    <button class="nav-btn" onclick="showView('monitor', this)">APs, Clients &amp; RF</button>
+
+    <div class="nav-group">Security &amp; WIDS (Wazuh)</div>
+    <button class="nav-btn" onclick="showView('wids', this)">WIDS, Posture &amp; Risk</button>
+
+    <div class="nav-group">Forensics (Wireshark)</div>
+    <button class="nav-btn" onclick="showView('pcap', this)">PCAP Lab (tshark)</button>
+
+    <div class="nav-group">Log &amp; Report</div>
+    <button class="nav-btn" onclick="showView('reports', this)">Reports &amp; Audit Log</button>
+  </aside>
+
+  <main>
+    <div class="topbar">
       <div>
-        <span id="mode-badge" class="badge">Modo Pasivo / Defensivo</span>
-        <h1 style="margin:6px 0 0 0; font-size:22px;">OpenSec Studio — Wireless Security Center</h1>
+        <span id="mode-badge" class="badge">Conectando...</span>
+        <span id="db-badge" class="badge info" style="margin-left:6px;">PostgreSQL: ...</span>
       </div>
       <div style="display:flex; gap:8px;">
-        <button onclick="loadDashboard()">Actualizar</button>
-        <button id="kill-btn" class="kill" onclick="toggleKillSwitch()">Kill Switch</button>
+        <button class="btn secondary" onclick="refreshAll()">Actualizar Todo</button>
+        <button id="kill-btn" class="btn danger" onclick="toggleKillSwitch()">Kill Switch</button>
       </div>
-    </header>
+    </div>
 
-    <section class="filters" aria-label="Filtros de monitoreo">
-      <input type="date" id="f-from" title="Fecha inicio" />
-      <input type="date" id="f-to" title="Fecha fin" />
-      <input type="text" id="f-org" placeholder="Organización" />
-      <input type="text" id="f-sensor" placeholder="Sensor ID" />
-      <input type="text" id="f-network" placeholder="Red / SSID / BSSID" />
-      <select id="f-severity">
-        <option value="">Severidad (todas)</option>
-        <option value="critical">Critical</option>
-        <option value="high">High</option>
-        <option value="medium">Medium</option>
-        <option value="low">Low</option>
-      </select>
-      <input type="number" id="f-conf" min="0" max="1" step="0.1" placeholder="Confianza mín (0-1)" />
-      <button onclick="loadDashboard()">Aplicar Filtros</button>
+    <!-- 1. DASHBOARD -->
+    <section id="view-dashboard" class="view active">
+      <div class="kpis">
+        <div class="kpi"><div class="label">Sensores Online</div><div class="val" id="k-sensors">0</div></div>
+        <div class="kpi"><div class="label">Redes / AP</div><div class="val" id="k-networks">0</div></div>
+        <div class="kpi"><div class="label">Clientes</div><div class="val" id="k-clients">0</div></div>
+        <div class="kpi"><div class="label">Redes No Autorizadas</div><div class="val" id="k-unknown">0</div></div>
+        <div class="kpi"><div class="label">Alertas WIDS Abiertas</div><div class="val" id="k-alerts">0</div></div>
+        <div class="kpi"><div class="label">Capturas PCAP</div><div class="val" id="k-pcaps">0</div></div>
+      </div>
+
+      <div class="card">
+        <h2>Flujo Operativo de Auditoría Wi-Fi</h2>
+        <ol class="muted" style="line-height:1.8; margin:0; padding-left:20px;">
+          <li><strong>Policy &amp; Scope:</strong> Registra tus SSIDs/BSSIDs legítimos en la Allowlist para que el motor WIDS distinga redes propias vs <em>Rogue AP / Evil Twin</em>.</li>
+          <li><strong>PCAP Lab o Sensores Linux:</strong> Sube un archivo <code>.pcap</code> / <code>.pcapng</code> en <em>PCAP Lab</em> (procesado con <code>tshark</code> real) o ingesta desde un sensor <strong>Kismet</strong> en Linux.</li>
+          <li><strong>Wireless Monitor &amp; Security WIDS:</strong> Revisa el inventario 802.11, hallazgos (<em>Observed / Inferred / Proven / Potential</em>), alertas WIDS y <em>Risk Score</em>.</li>
+          <li><strong>Reports &amp; Audit Log:</strong> Exporta en <strong>JSON</strong>, <strong>CSV</strong> o <strong>SARIF v2.1.0</strong> y verifica la trazabilidad en el log de auditoría.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h2>Distribución RF Observada (Bandas y Canales)</h2>
+        <pre id="rf-box">Sin muestras RF aún.</pre>
+      </div>
     </section>
 
-    <section class="kpis">
-      <div class="kpi"><div class="label">Sensores Online</div><div class="val" id="k-sensors">-</div></div>
-      <div class="kpi"><div class="label">Redes / AP Inventariados</div><div class="val" id="k-networks">-</div></div>
-      <div class="kpi"><div class="label">Clientes Observados</div><div class="val" id="k-clients">-</div></div>
-      <div class="kpi"><div class="label">Redes Desconocidas</div><div class="val" id="k-unknown">-</div></div>
-      <div class="kpi"><div class="label">Alertas Rogue AP / WIDS</div><div class="val" id="k-alerts">-</div></div>
-      <div class="kpi"><div class="label">Capturas PCAP Analizadas</div><div class="val" id="k-pcaps">-</div></div>
+    <!-- 2. POLICY & SCOPE -->
+    <section id="view-policy" class="view">
+      <div class="card">
+        <h2>Authorization Scope (Modo Pasivo Obligatorio)</h2>
+        <div class="form-row">
+          <input id="sc-name" placeholder="Nombre del Scope (ej. Auditoría Oficina)" style="min-width:240px;" />
+          <input id="sc-ref" placeholder="Referencia de autorización / Ticket" style="min-width:240px;" />
+          <button class="btn" onclick="createScope()">Crear Scope</button>
+        </div>
+        <table><thead><tr><th>Nombre</th><th>Modo</th><th>Referencia</th><th>Inicio</th></tr></thead><tbody id="tb-scopes"></tbody></table>
+      </div>
+
+      <div class="card">
+        <h2>Authorized Networks (Allowlist SSID / BSSID)</h2>
+        <div class="form-row">
+          <input id="al-ssid" placeholder="SSID autorizado (ej. CorpWiFi)" />
+          <input id="al-bssid" placeholder="BSSID opcional (aa:bb:cc:11:22:33)" />
+          <input id="al-notes" placeholder="Notas" />
+          <button class="btn" onclick="addAllowlist()">Agregar a Allowlist</button>
+        </div>
+        <table><thead><tr><th>SSID</th><th>BSSID</th><th>Scope</th><th>Notas</th><th>Acción</th></tr></thead><tbody id="tb-allowlist"></tbody></table>
+      </div>
     </section>
 
-    <section class="grid">
-      <div class="panel"><h2>Estado de Sensores y Hardware Wi-Fi</h2><div id="p-sensors" class="empty">Cargando...</div></div>
-      <div class="panel"><h2>Inventario de AP y Seguridad por Protocolo</h2><div id="p-networks" class="empty">Cargando...</div></div>
-      <div class="panel"><h2>Alertas WIDS, Rogue AP y Anomalías</h2><div id="p-alerts" class="empty">Cargando...</div></div>
-      <div class="panel"><h2>Risk Scoring, Canales, Bandas e Informes</h2><div id="p-risks" class="empty">Cargando...</div></div>
+    <!-- 3. SENSORS & HARDWARE -->
+    <section id="view-sensors" class="view">
+      <div class="card">
+        <h2>Registrar Sensor Linux (Kismet / Wireless Agent)</h2>
+        <div class="form-row">
+          <input id="sn-host" placeholder="Hostname (ej. kali-sensor-01)" />
+          <select id="sn-mode"><option value="docker">Docker</option><option value="native_systemd">Linux Nativo (systemd)</option></select>
+          <input id="sn-ep" placeholder="Endpoint Kismet (http://192.168.1.50:2501)" style="min-width:260px;" />
+          <button class="btn" onclick="registerSensor()">Registrar Sensor</button>
+        </div>
+        <table><thead><tr><th>Hostname</th><th>Despliegue</th><th>Estado</th><th>Endpoint Kismet</th><th>Último Heartbeat</th></tr></thead><tbody id="tb-sensors"></tbody></table>
+      </div>
     </section>
-  </div>
+
+    <!-- 4. WIRELESS MONITOR -->
+    <section id="view-monitor" class="view">
+      <div class="card">
+        <h2>Inventario de Puntos de Acceso (AP / SSID)</h2>
+        <div class="form-row">
+          <input id="flt-net" placeholder="Filtrar por SSID o BSSID..." oninput="loadNetworks()" />
+        </div>
+        <table>
+          <thead><tr><th>SSID</th><th>BSSID</th><th>Banda / Canal</th><th>Seguridad</th><th>WPS</th><th>Autorizada</th><th>Risk Score</th></tr></thead>
+          <tbody id="tb-networks"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h2>Clientes Inalámbricos Observados</h2>
+        <table><thead><tr><th>Client MAC</th><th>BSSID Asociado</th><th>Última vez visto</th></tr></thead><tbody id="tb-clients"></tbody></table>
+      </div>
+    </section>
+
+    <!-- 5. SECURITY & WIDS -->
+    <section id="view-wids" class="view">
+      <div class="card">
+        <h2>Alertas WIDS (Correlación Multi-Indicador)</h2>
+        <table><thead><tr><th>Regla</th><th>Categoría</th><th>Severidad</th><th>Confianza</th><th>Explicación / Evidencia</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="tb-alerts"></tbody></table>
+      </div>
+      <div class="card">
+        <h2>Wireless Security Assessment (Postura)</h2>
+        <table><thead><tr><th>Red / BSSID</th><th>Regla</th><th>Naturaleza</th><th>Severidad</th><th>Hallazgo y Remediación</th></tr></thead><tbody id="tb-assessments"></tbody></table>
+      </div>
+      <div class="card">
+        <h2>Risk Scoring (0–100)</h2>
+        <table><thead><tr><th>Red / BSSID</th><th>Score</th><th>Explicación</th><th>Mitigación Prioritaria</th></tr></thead><tbody id="tb-risks"></tbody></table>
+      </div>
+    </section>
+
+    <!-- 6. PCAP LAB -->
+    <section id="view-pcap" class="view">
+      <div class="card">
+        <h2>Subir y Analizar Captura (.pcap / .pcapng) con tshark Real</h2>
+        <div class="form-row">
+          <input type="file" id="pcap-file" accept=".pcap,.pcapng" />
+          <button class="btn" onclick="uploadPcap()">Subir y Analizar</button>
+          <button class="btn secondary" onclick="purgePcaps()">Purgar Expiradas (Retención)</button>
+        </div>
+        <div id="pcap-status" class="muted"></div>
+      </div>
+      <div class="card">
+        <h2>Historial de Capturas Analizadas</h2>
+        <table><thead><tr><th>Archivo</th><th>Frames</th><th>Deauth</th><th>EAPOL</th><th>Resumen Ejecutivo</th><th>SHA-256</th></tr></thead><tbody id="tb-pcaps"></tbody></table>
+      </div>
+    </section>
+
+    <!-- 7. REPORTS & AUDIT -->
+    <section id="view-reports" class="view">
+      <div class="card">
+        <h2>Exportar Informes de Seguridad</h2>
+        <div class="form-row">
+          <a class="btn" href="/api/v1/reports/export?format=json" target="_blank">Exportar JSON</a>
+          <a class="btn" href="/api/v1/reports/export?format=csv" download="opensec_report.csv">Exportar CSV</a>
+          <a class="btn" href="/api/v1/reports/export?format=sarif" download="opensec_report.sarif.json">Exportar SARIF v2.1.0</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Audit Log (Trazabilidad Inmutable)</h2>
+        <table><thead><tr><th>ID</th><th>Acción</th><th>Recurso</th><th>Detalle</th><th>Fecha</th></tr></thead><tbody id="tb-audit"></tbody></table>
+      </div>
+    </section>
+  </main>
 
   <script>
     let killSwitchActive = false;
 
-    function buildQuery() {
-      const p = new URLSearchParams();
-      const map = {
-        date_from: document.getElementById('f-from').value,
-        date_to: document.getElementById('f-to').value,
-        org: document.getElementById('f-org').value,
-        sensor: document.getElementById('f-sensor').value,
-        network: document.getElementById('f-network').value,
-        severity: document.getElementById('f-severity').value,
-        min_confidence: document.getElementById('f-conf').value
-      };
-      Object.entries(map).forEach(([k, v]) => { if (v) p.set(k, v); });
-      const qs = p.toString();
-      return qs ? '?' + qs : '';
+    function showView(id, btn) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('view-' + id).classList.add('active');
+      if (btn) btn.classList.add('active');
     }
 
-    function renderList(elId, items, emptyMsg) {
-      const el = document.getElementById(elId);
-      if (!items || items.length === 0) {
-        el.className = 'empty';
-        el.textContent = emptyMsg;
-        return;
-      }
-      el.className = '';
-      el.innerHTML = '<ul>' + items.map(i => '<li>' + JSON.stringify(i) + '</li>').join('') + '</ul>';
+    async function api(path, opts) {
+      const r = await fetch(path, opts);
+      return r.json();
     }
 
-    async function loadDashboard() {
-      const qs = buildQuery();
-      try {
-        const [sum, sensors, nets, alerts, risks] = await Promise.all([
-          fetch('/api/v1/dashboard/summary' + qs).then(r => r.json()),
-          fetch('/api/v1/sensors' + qs).then(r => r.json()),
-          fetch('/api/v1/networks' + qs).then(r => r.json()),
-          fetch('/api/v1/alerts' + qs).then(r => r.json()),
-          fetch('/api/v1/risks' + qs).then(r => r.json())
-        ]);
-        killSwitchActive = !!sum.kill_switch_active;
-        const badge = document.getElementById('mode-badge');
-        badge.textContent = killSwitchActive ? 'KILL SWITCH ACTIVO (Captura detenida)' : 'Modo Pasivo / Defensivo (' + sum.mode + ')';
-        badge.className = killSwitchActive ? 'badge killed' : 'badge';
+    async function refreshAll() {
+      const [h, sum, scopes, allow, sensors, nets, clients, alerts, assess, risks, pcaps, audit] = await Promise.all([
+        api('/api/health'),
+        api('/api/v1/dashboard/summary'),
+        api('/api/v1/scopes'),
+        api('/api/v1/allowlist'),
+        api('/api/v1/sensors'),
+        api('/api/v1/networks'),
+        api('/api/v1/clients'),
+        api('/api/v1/alerts'),
+        api('/api/v1/assessments'),
+        api('/api/v1/risks'),
+        api('/api/v1/pcaps'),
+        api('/api/v1/audit-logs')
+      ]);
 
-        document.getElementById('k-sensors').textContent = sum.sensors_online;
-        document.getElementById('k-networks').textContent = sum.networks_total;
-        document.getElementById('k-clients').textContent = sum.clients_observed;
-        document.getElementById('k-unknown').textContent = sum.unknown_networks;
-        document.getElementById('k-alerts').textContent = sum.open_alerts;
-        document.getElementById('k-pcaps').textContent = sum.captures_analyzed;
+      killSwitchActive = !!h.kill_switch_active;
+      const mb = document.getElementById('mode-badge');
+      mb.textContent = killSwitchActive ? 'KILL SWITCH ACTIVO' : 'Modo Pasivo (' + h.mode + ')';
+      mb.className = killSwitchActive ? 'badge killed' : 'badge';
+      document.getElementById('db-badge').textContent = h.db_connected ? 'PostgreSQL: Conectado' : 'PostgreSQL: Error';
 
-        renderList('p-sensors', sensors.items, 'Sin sensores registrados aún (ejecuta perfil wireless-sensor en Linux).');
-        renderList('p-networks', nets.items, 'Sin redes observadas aún.');
-        renderList('p-alerts', alerts.items, 'Sin alertas WIDS activas.');
-        renderList('p-risks', risks.items, 'Sin evaluaciones de riesgo registradas aún.');
-      } catch (e) {
-        document.getElementById('mode-badge').textContent = 'API no disponible';
-      }
+      document.getElementById('k-sensors').textContent = sum.sensors_online ?? 0;
+      document.getElementById('k-networks').textContent = sum.networks_total ?? 0;
+      document.getElementById('k-clients').textContent = sum.clients_observed ?? 0;
+      document.getElementById('k-unknown').textContent = sum.unknown_networks ?? 0;
+      document.getElementById('k-alerts').textContent = sum.open_alerts ?? 0;
+      document.getElementById('k-pcaps').textContent = sum.captures_analyzed ?? 0;
+      document.getElementById('rf-box').textContent = JSON.stringify(sum.rf || {}, null, 2);
+
+      document.getElementById('tb-scopes').innerHTML = (scopes.items || []).map(s =>
+        `<tr><td>${s.name}</td><td>${s.mode}</td><td>${s.evidence_ref}</td><td>${s.valid_from}</td></tr>`
+      ).join('') || '<tr><td colspan="4" class="muted">Sin scopes creados.</td></tr>';
+
+      document.getElementById('tb-allowlist').innerHTML = (allow.items || []).map(a =>
+        `<tr><td>${a.ssid || '-'}</td><td><code>${a.bssid || '*'}</code></td><td>${a.scope_name}</td><td>${a.notes}</td><td><button class="btn danger sm" onclick="delAllowlist('${a.id}')">Eliminar</button></td></tr>`
+      ).join('') || '<tr><td colspan="5" class="muted">Allowlist vacía.</td></tr>';
+
+      document.getElementById('tb-sensors').innerHTML = (sensors.items || []).map(s =>
+        `<tr><td>${s.hostname}</td><td>${s.deployment_mode}</td><td>${s.status}</td><td><code>${s.kismet_endpoint}</code></td><td>${s.last_heartbeat_at}</td></tr>`
+      ).join('') || '<tr><td colspan="5" class="muted">Sin sensores registrados.</td></tr>';
+
+      renderNetworks(nets.items || []);
+
+      document.getElementById('tb-clients').innerHTML = (clients.items || []).map(c =>
+        `<tr><td><code>${c.client_mac}</code></td><td><code>${c.associated_bssid || '-'}</code></td><td>${c.last_seen_at}</td></tr>`
+      ).join('') || '<tr><td colspan="3" class="muted">Sin clientes observados aún.</td></tr>';
+
+      document.getElementById('tb-alerts').innerHTML = (alerts.items || []).map(a =>
+        `<tr><td><code>${a.rule_id}</code></td><td>${a.category}</td><td><span class="badge ${a.severity==='critical'||a.severity==='high'?'crit':'warn'}">${a.severity}</span></td><td>${a.confidence}</td><td>${a.explanation}<br><small class="muted">${JSON.stringify(a.evidence)}</small></td><td>${a.status}</td><td><button class="btn sm secondary" onclick="setAlertStatus('${a.id}','acknowledged')">Ack</button> <button class="btn sm" onclick="setAlertStatus('${a.id}','resolved')">Resolver</button></td></tr>`
+      ).join('') || '<tr><td colspan="7" class="muted">Sin alertas WIDS.</td></tr>';
+
+      document.getElementById('tb-assessments').innerHTML = (assess.items || []).map(f =>
+        `<tr><td>${f.ssid || '(oculto)'}<br><small><code>${f.bssid}</code></small></td><td><code>${f.rule_id}</code></td><td>${f.finding_nature}</td><td>${f.severity}</td><td><strong>${f.title}</strong><br><small class="muted">${f.remediation}</small></td></tr>`
+      ).join('') || '<tr><td colspan="5" class="muted">Sin hallazgos aún.</td></tr>';
+
+      document.getElementById('tb-risks').innerHTML = (risks.items || []).map(r =>
+        `<tr><td>${r.ssid || '(oculto)'}<br><small><code>${r.bssid}</code></small></td><td><strong>${r.score}</strong></td><td>${r.explanation}</td><td>${r.mitigation_summary}</td></tr>`
+      ).join('') || '<tr><td colspan="4" class="muted">Sin evaluaciones de riesgo aún.</td></tr>';
+
+      document.getElementById('tb-pcaps').innerHTML = (pcaps.items || []).map(p =>
+        `<tr><td>${p.filename}</td><td>${p.total_frames}</td><td>${p.deauth_frames}</td><td>${p.eapol_frames}</td><td>${p.executive_summary}</td><td><small><code>${(p.sha256||'').slice(0,16)}...</code></small></td></tr>`
+      ).join('') || '<tr><td colspan="6" class="muted">Sin capturas analizadas aún.</td></tr>';
+
+      document.getElementById('tb-audit').innerHTML = (audit.items || []).map(l =>
+        `<tr><td>${l.id}</td><td><code>${l.action}</code></td><td>${l.resource_type}:${l.resource_id}</td><td><small>${JSON.stringify(l.metadata)}</small></td><td>${l.created_at}</td></tr>`
+      ).join('') || '<tr><td colspan="5" class="muted">Sin eventos registrados.</td></tr>';
+    }
+
+    function renderNetworks(items) {
+      document.getElementById('tb-networks').innerHTML = items.map(n =>
+        `<tr><td>${n.ssid || '(oculto)'}</td><td><code>${n.bssid}</code></td><td>${n.band || '-'} / ch ${n.channel || '-'}</td><td>${n.security_observed}</td><td>${n.wps_observed ? 'Sí' : 'No'}</td><td>${n.is_authorized ? '<span class="badge">Autorizada</span>' : '<span class="badge warn">Desconocida</span>'}</td><td><strong>${n.risk_score}</strong></td></tr>`
+      ).join('') || '<tr><td colspan="7" class="muted">Sin redes observadas aún.</td></tr>';
+    }
+
+    async function loadNetworks() {
+      const q = encodeURIComponent(document.getElementById('flt-net').value || '');
+      const data = await api('/api/v1/networks?network=' + q);
+      renderNetworks(data.items || []);
     }
 
     async function toggleKillSwitch() {
-      const endpoint = killSwitchActive ? '/api/v1/kill-switch/disable' : '/api/v1/kill-switch/enable';
-      await fetch(endpoint, { method: 'POST' });
-      await loadDashboard();
+      await fetch(killSwitchActive ? '/api/v1/kill-switch/disable' : '/api/v1/kill-switch/enable', { method: 'POST' });
+      await refreshAll();
     }
 
-    loadDashboard();
+    async function createScope() {
+      await api('/api/v1/scopes', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ name: document.getElementById('sc-name').value, evidence_ref: document.getElementById('sc-ref').value }) });
+      await refreshAll();
+    }
+
+    async function addAllowlist() {
+      await api('/api/v1/allowlist', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ ssid: document.getElementById('al-ssid').value, bssid: document.getElementById('al-bssid').value, notes: document.getElementById('al-notes').value }) });
+      await refreshAll();
+    }
+
+    async function delAllowlist(id) {
+      await fetch('/api/v1/allowlist?id=' + encodeURIComponent(id), { method: 'DELETE' });
+      await refreshAll();
+    }
+
+    async function registerSensor() {
+      await api('/api/v1/sensors', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ hostname: document.getElementById('sn-host').value, deployment_mode: document.getElementById('sn-mode').value, kismet_endpoint: document.getElementById('sn-ep').value }) });
+      await refreshAll();
+    }
+
+    async function setAlertStatus(id, status) {
+      await api('/api/v1/alerts', { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ id, status }) });
+      await refreshAll();
+    }
+
+    async function uploadPcap() {
+      const input = document.getElementById('pcap-file');
+      const status = document.getElementById('pcap-status');
+      if (!input.files || !input.files[0]) { status.textContent = 'Selecciona un archivo .pcap o .pcapng primero.'; return; }
+      const file = input.files[0];
+      status.textContent = 'Analizando ' + file.name + ' con tshark...';
+      const resp = await fetch('/api/v1/pcaps/upload?filename=' + encodeURIComponent(file.name), { method: 'POST', body: file });
+      const data = await resp.json();
+      if (!resp.ok) { status.textContent = 'Error: ' + (data.error || resp.status); return; }
+      status.textContent = 'Completado: ' + (data.capture?.executive_summary || 'OK');
+      await refreshAll();
+    }
+
+    async function purgePcaps() {
+      const data = await api('/api/v1/pcaps/purge', { method: 'POST' });
+      document.getElementById('pcap-status').textContent = 'Purga ejecutada: ' + JSON.stringify(data);
+      await refreshAll();
+    }
+
+    refreshAll();
   </script>
 </body>
 </html>

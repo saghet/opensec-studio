@@ -1,11 +1,10 @@
-FROM rust:1.85.0-alpine3.21 AS builder
+FROM rust:1.91-alpine3.21 AS builder
 WORKDIR /app
 RUN apk add --no-cache musl-dev
-COPY Cargo.toml ./
-COPY services/opensec-api/Cargo.toml services/opensec-api/Cargo.toml
-COPY services/opensec-api/src services/opensec-api/src
-COPY services/opensec-worker/Cargo.toml services/opensec-worker/Cargo.toml
-COPY services/opensec-worker/src services/opensec-worker/src
+COPY Cargo.toml Cargo.lock ./
+COPY crates/opensec-core crates/opensec-core
+COPY services/opensec-api services/opensec-api
+COPY services/opensec-worker services/opensec-worker
 RUN cargo build --release --bin opensec-worker
 
 FROM alpine:3.21.3
